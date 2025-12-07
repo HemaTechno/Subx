@@ -1,1 +1,220 @@
-Hello
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SubX.Click - إدارة اشتراكاتك بنقرة واحدة</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- CSS Link -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="https://img.icons8.com/color/96/000000/box-important.png" type="image/x-icon">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <i class="fas fa-cube"></i>
+                <span>SubX.Click</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link active">الرئيسية</a></li>
+                <li><a href="#features" class="nav-link">المميزات</a></li>
+                <li><a href="#pricing" class="nav-link">الأسعار</a></li>
+                <li><a href="#contact" class="nav-link">اتصل بنا</a></li>
+            </ul>
+            <div class="nav-buttons">
+                <a href="#" class="btn btn-login">تسجيل الدخول</a>
+                <a href="#" class="btn btn-signup">اشترك الآن</a>
+            </div>
+            <button class="hamburger" id="hamburger">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-container">
+            <div class="hero-text">
+                <h1><span class="highlight">إدارة اشتراكاتك</span> بنقرة واحدة</h1>
+                <p class="subtitle">
+                    منصة SubX.Click تتيح لك تتبع وإدارة جميع اشتراكاتك الشهرية في مكان واحد، مع تنبيهات لتجديدها وإحصائيات ذكية لتوفير أموالك.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#" class="btn btn-primary">ابدأ مجاناً <i class="fas fa-arrow-left"></i></a>
+                    <a href="#features" class="btn btn-secondary">اكتشف المميزات <i class="fas fa-play-circle"></i></a>
+                </div>
+                <div class="stats">
+                    <div class="stat-item">
+                        <h3>+2,500</h3>
+                        <p>مستخدم نشط</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>+15,000</h3>
+                        <p>اشتراك مُدار</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>+75,000 ريال</h3>
+                        <p>مدخر للمستخدمين</p>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="https://cdn.pixabay.com/photo/2017/08/06/14/30/laptop-2593016_1280.jpg" alt="Dashboard Illustration">
+                <!-- صورة احتياطية توضيحية -->
+                <div class="floating-card card1">
+                    <i class="fas fa-music"></i>
+                    <span>سبوتيفاي</span>
+                    <span class="price">29.99 ريال</span>
+                </div>
+                <div class="floating-card card2">
+                    <i class="fas fa-film"></i>
+                    <span>نتفليكس</span>
+                    <span class="price">45.50 ريال</span>
+                </div>
+                <div class="floating-card card3">
+                    <i class="fas fa-cloud"></i>
+                    <span>السحابة</span>
+                    <span class="price">19.00 ريال</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="section-container">
+            <div class="section-header">
+                <h2>لماذا تختار <span class="highlight">SubX.Click</span>؟</h2>
+                <p class="section-subtitle">أدوات قوية مصممة لتبسيط إدارة اشتراكاتك الرقمية.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <h3>تحليل مرئي</h3>
+                    <p>شاهد إنفاقك على الاشتراكات عبر رسوم بيانية تفاعلية واضحة، واحصل على تقارير شهرية مفصلة.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <h3>تنبيهات ذكية</h3>
+                    <p>لا تفوت أي تاريخ تجديد. نوفر لك تنبيهات عبر البريد الإلكتروني والتطبيق قبل انتهاء الاشتراكات.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <h3>حماية وأمان</h3>
+                    <p>بياناتك مشفرة بالكامل. نحن لا نخزن أي معلومات بطاقتك الائتمانية. أمانك هو أولويتنا.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-sync-alt"></i>
+                    </div>
+                    <h3>مزامنة تلقائية</h3>
+                    <p>قم بمزامنة اشتراكاتك من البريد الإلكتروني أو البنك تلقائياً. لا حاجة للإدخال اليدوي.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>متاح على جميع الأجهزة</h3>
+                    <p>ادفع اشتراكاتك من أي مكان. تطبيقنا يعمل على الهاتف، اللابتوب والتابلت دون عناء.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-hand-holding-usd"></i>
+                    </div>
+                    <h3>توفير المال</h3>
+                    <p>اكتشف الاشتراكات غير المستخدمة واقتراحات خطط أرخص. وفر ما يصل إلى 30% من إنفاقك الشهري.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="section-container">
+            <h2>جاهز لتبدأ رحلة التحكم بإنفاقك؟</h2>
+            <p>انضم إلى آلاف المستخدمين الراضين واسترجع السيطرة على اشتراكاتك اليوم.</p>
+            <a href="#" class="btn btn-primary btn-large">ابدأ مجاناً لمدة 14 يوم <i class="fas fa-rocket"></i></a>
+            <p class="cta-note">لا حاجة لبطاقة ائتمان. إلغاء في أي وقت.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-col">
+                <a href="#" class="logo">
+                    <i class="fas fa-cube"></i>
+                    <span>SubX.Click</span>
+                </a>
+                <p class="footer-about">منصة رائدة في إدارة وتتبع الاشتراكات الشهرية، نساعدك على البساطة والتحكم المالي.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>الشركة</h4>
+                <ul>
+                    <li><a href="#">عنّا</a></li>
+                    <li><a href="#">الوظائف</a></li>
+                    <li><a href="#">المدونة</a></li>
+                    <li><a href="#">الشركاء</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>الدعم</h4>
+                <ul>
+                    <li><a href="#">الأسئلة الشائعة</a></li>
+                    <li><a href="#">مركز المساعدة</a></li>
+                    <li><a href="#">اتصل بنا</a></li>
+                    <li><a href="#">حالة النظام</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>القوانين</h4>
+                <ul>
+                    <li><a href="#">شروط الخدمة</a></li>
+                    <li><a href="#">الخصوصية</a></li>
+                    <li><a href="#">ملفات تعريف الارتباط</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2023 SubX.Click. جميع الحقوق محفوظة. | صمم بـ <i class="fas fa-heart"></i> لفائدتك</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Mobile Menu -->
+    <script>
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+
+        hamburger.addEventListener('click', () => {
+            navMenu.classList.toggle('show');
+            hamburger.querySelector('i').classList.toggle('fa-times');
+        });
+
+        // Close menu when clicking a link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('show');
+                hamburger.querySelector('i').classList.remove('fa-times');
+            });
+        });
+    </script>
+</body>
+</html>
