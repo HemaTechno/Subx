@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -7,313 +7,508 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    :root{
-      --bg: #0f172a; /* خلفية غامقة */
-      --card: #1e293b; /* كارت غامق */
-      --muted: #94a3b8; /* نص ثانوي */
-      --red: #ef4444; 
-      --red-dark: #dc2626;
-      --accent: #f1f5f9; /* نص رئيسي فاتح */
+    :root {
+      --bg: #0f172a;
+      --bg-light: #1e293b;
+      --bg-lighter: #334155;
+      --card: #1e293b;
+      --card-hover: #253149;
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
       --primary: #3b82f6;
-      --primary-light: #60a5fa;
-      --border: #334155; /* حدود غامقة */
+      --primary-hover: #60a5fa;
+      --primary-light: rgba(59, 130, 246, 0.1);
+      --accent: #8b5cf6;
+      --accent-hover: #a78bfa;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --danger-hover: #dc2626;
+      --border: #334155;
+      --border-light: #475569;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.15);
       --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
       --shadow-lg: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+      --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+      --radius-sm: 8px;
       --radius: 12px;
-      --transition: all 0.3s ease;
+      --radius-lg: 16px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
     
-    *{
-      box-sizing:border-box;
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
       font-family: 'Tajawal', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    }
-    
-    body{
-      margin:0;
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-      color:var(--accent);
-      padding:24px;
-      direction:rtl;
+      background: linear-gradient(135deg, #0f172a 0%, #1a2332 50%, #0f172a 100%);
+      color: var(--text-primary);
       min-height: 100vh;
+      padding: 20px;
+      direction: rtl;
+      position: relative;
+      overflow-x: hidden;
     }
     
-    /* رأس الصفحة مع اللوجو والاسم */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.1) 0%, transparent 20%),
+        radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.1) 0%, transparent 20%),
+        radial-gradient(circle at 40% 80%, rgba(239, 68, 68, 0.05) 0%, transparent 20%);
+      z-index: -1;
+    }
+    
+    /* Header Styling */
     .header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 24px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid var(--border);
+      margin-bottom: 30px;
+      padding: 20px 0;
+      position: relative;
+    }
+    
+    .header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(to left, transparent, var(--border), transparent);
     }
     
     .logo-container {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 15px;
     }
     
-    .logo-placeholder {
-      width: 50px;
-      height: 50px;
-      background: linear-gradient(135deg, var(--primary), #8b5cf6);
-      border-radius: 10px;
+    .logo {
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-radius: var(--radius);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 700;
-      font-size: 20px;
       color: white;
-      box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+      font-weight: 700;
+      font-size: 24px;
+      box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .logo::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transform: rotate(45deg);
+    }
+    
+    .brand {
+      display: flex;
+      flex-direction: column;
     }
     
     .site-name {
-      font-size: 24px;
-      font-weight: 700;
-      background: linear-gradient(to left, var(--primary), #8b5cf6);
+      font-size: 28px;
+      font-weight: 800;
+      background: linear-gradient(to left, var(--primary), var(--accent));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      letter-spacing: -0.5px;
     }
     
     .site-tagline {
       font-size: 14px;
-      color: var(--muted);
+      color: var(--text-secondary);
       margin-top: 4px;
     }
     
-    .container{
-      max-width:820px;
-      margin:0 auto;
-      animation: fadeIn 0.5s ease-out;
+    .version-badge {
+      background: var(--bg-lighter);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 8px 16px;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: var(--shadow-sm);
     }
     
-    .card{
-      background:var(--card);
-      border-radius:var(--radius);
-      padding:28px;
-      box-shadow:var(--shadow);
-      border:1px solid rgba(255, 255, 255, 0.05);
+    .version-badge i {
+      color: var(--primary);
+    }
+    
+    /* Main Container */
+    .container {
+      max-width: 920px;
+      margin: 0 auto;
+      animation: fadeIn 0.6s ease-out;
+    }
+    
+    /* Card Styling */
+    .card {
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      box-shadow: var(--shadow-xl);
+      border: 1px solid rgba(255, 255, 255, 0.05);
       backdrop-filter: blur(10px);
       transition: var(--transition);
+      margin-bottom: 24px;
     }
     
     .card:hover {
       box-shadow: var(--shadow-lg);
-      border-color: rgba(59, 130, 246, 0.2);
+      border-color: rgba(59, 130, 246, 0.15);
+      transform: translateY(-2px);
     }
     
-    h1{
-      margin:0 0 20px;
-      font-size:24px;
-      font-weight:700;
-      color: var(--accent);
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 28px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .card-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .card-title i {
+      color: var(--primary);
+      background: var(--primary-light);
+      padding: 10px;
+      border-radius: var(--radius);
+    }
+    
+    .card-subtitle {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-top: 6px;
+    }
+    
+    /* Form Elements */
+    .form-section {
+      margin-bottom: 28px;
+    }
+    
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 20px;
+      padding-right: 12px;
       position: relative;
-      padding-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
     
-    h1:after {
+    .section-title::before {
       content: '';
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      width: 60px;
-      height: 4px;
-      background: linear-gradient(to left, var(--red), var(--primary));
-      border-radius: 2px;
+      width: 6px;
+      height: 24px;
+      background: linear-gradient(to bottom, var(--primary), var(--accent));
+      border-radius: 3px;
     }
     
-    label{
-      display:block;
-      margin:16px 0 8px;
-      font-size:14px;
-      font-weight:500;
-      color:var(--muted);
+    .section-title i {
+      color: var(--text-secondary);
+      font-size: 16px;
     }
     
-    input[type="text"], input[type="url"], textarea, select{
-      width:100%;
-      padding:14px;
-      border-radius:8px;
-      border:1.5px solid var(--border);
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-label {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .form-label span.required {
+      color: var(--danger);
+      font-size: 12px;
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: var(--radius);
+      border: 1.5px solid var(--border);
       background: rgba(15, 23, 42, 0.7);
-      color: var(--accent);
-      font-size:15px;
+      color: var(--text-primary);
+      font-size: 15px;
       transition: var(--transition);
     }
     
-    input[type="text"]:focus, input[type="url"]:focus, textarea:focus, select:focus{
-      outline:none;
+    .form-control:focus {
+      outline: none;
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
       background: rgba(15, 23, 42, 0.9);
     }
     
-    textarea{
-      min-height:100px;
-      resize:vertical;
-      line-height:1.5;
+    .form-control::placeholder {
+      color: var(--text-muted);
     }
     
-    .row{
-      display:flex;
-      gap:16px;
-      align-items:center;
+    textarea.form-control {
+      min-height: 120px;
+      resize: vertical;
+      line-height: 1.6;
     }
     
-    .row .flex{
-      flex:1;
-    }
-    
-    .cover-box{
-      height:180px;
-      border:2px dashed var(--border);
-      border-radius:10px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      color:var(--muted);
-      cursor:pointer;
-      overflow:hidden;
-      position:relative;
+    /* Cover Box */
+    .cover-box {
+      height: 200px;
+      border: 2px dashed var(--border);
+      border-radius: var(--radius);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      cursor: pointer;
+      overflow: hidden;
+      position: relative;
       transition: var(--transition);
       background: rgba(15, 23, 42, 0.5);
     }
     
-    .cover-box:hover{
+    .cover-box:hover {
       border-color: var(--primary);
       background: rgba(15, 23, 42, 0.7);
     }
     
-    .cover-box img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
+    .cover-box i {
+      font-size: 42px;
+      margin-bottom: 12px;
+      opacity: 0.7;
     }
     
-    .small{
-      font-size:13px;
-      color:var(--muted);
+    .cover-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
     
-    .btn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap: 8px;
-      padding:12px 20px;
-      border-radius:10px;
-      background:var(--red);
-      color:white;
-      text-decoration:none;
-      cursor:pointer;
-      border:none;
-      font-weight:500;
-      font-size:14px;
-      transition: var(--transition);
-      box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.2);
+    .form-row {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 20px;
     }
     
-    .btn:hover{
-      background: var(--red-dark);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 10px -1px rgba(239, 68, 68, 0.3);
+    .form-col {
+      flex: 1;
     }
     
-    .btn.ghost{
-      background:transparent;
-      color:var(--red);
-      border:1.5px solid var(--red);
-      box-shadow: none;
+    /* Tasks List */
+    .tasks-list {
+      margin-top: 20px;
     }
     
-    .btn.ghost:hover{
-      background: rgba(239, 68, 68, 0.1);
-      transform: translateY(-1px);
-    }
-    
-    .btn.secondary {
-      background: var(--primary);
-      box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.2);
-    }
-    
-    .btn.secondary:hover {
-      background: var(--primary-light);
-      box-shadow: 0 6px 10px -1px rgba(59, 130, 246, 0.3);
-    }
-    
-    .tasks-list{
-      margin-top:16px;
-    }
-    
-    .task-pill{
-      display:inline-flex;
-      align-items:center;
-      gap:10px;
-      padding:10px 16px;
-      border-radius:999px;
-      background: rgba(15, 23, 42, 0.5);
-      border:1.5px solid var(--border);
-      margin:8px 8px 0 0;
-      transition: var(--transition);
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    
-    .task-pill:hover {
-      border-color: var(--primary-light);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
-    
-    .task-pill .x{
-      cursor:pointer;
-      color:var(--muted);
-      font-weight:700;
-      padding:4px 8px;
-      border-radius: 50%;
+    .task-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+      background: var(--bg-light);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      margin-bottom: 12px;
       transition: var(--transition);
     }
     
-    .task-pill .x:hover{
-      background: rgba(239, 68, 68, 0.1);
-      color: var(--red);
+    .task-item:hover {
+      border-color: var(--border-light);
+      background: var(--bg-lighter);
+      transform: translateX(-4px);
     }
     
-    .meta{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      margin-top:16px;
-      padding: 12px 16px;
-      background: rgba(15, 23, 42, 0.5);
-      border-radius: 8px;
-      border-left: 4px solid var(--primary);
+    .task-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
     }
     
-    .left{
-      margin-left:auto;
+    .task-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 16px;
     }
     
-    .footer{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      margin-top:24px;
-      padding-top: 20px;
+    .task-content {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .task-title {
+      font-weight: 600;
+      font-size: 15px;
+      color: var(--text-primary);
+    }
+    
+    .task-details {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      display: flex;
+      gap: 15px;
+    }
+    
+    .task-actions {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-secondary);
+    }
+    
+    .empty-state i {
+      font-size: 48px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+    
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 24px;
+      border-radius: var(--radius);
+      font-weight: 600;
+      font-size: 15px;
+      cursor: pointer;
+      border: none;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+      color: white;
+      box-shadow: 0 6px 12px rgba(59, 130, 246, 0.3);
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(59, 130, 246, 0.4);
+    }
+    
+    .btn-secondary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+      color: white;
+      box-shadow: 0 6px 12px rgba(139, 92, 246, 0.3);
+    }
+    
+    .btn-secondary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(139, 92, 246, 0.4);
+    }
+    
+    .btn-danger {
+      background: linear-gradient(135deg, var(--danger), var(--danger-hover));
+      color: white;
+      box-shadow: 0 6px 12px rgba(239, 68, 68, 0.3);
+    }
+    
+    .btn-danger:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(239, 68, 68, 0.4);
+    }
+    
+    .btn-outline {
+      background: transparent;
+      color: var(--text-primary);
+      border: 1.5px solid var(--border);
+    }
+    
+    .btn-outline:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: rgba(59, 130, 246, 0.05);
+    }
+    
+    .btn-sm {
+      padding: 10px 16px;
+      font-size: 14px;
+    }
+    
+    .btn-icon {
+      padding: 12px;
+      min-width: 44px;
+    }
+    
+    /* Footer Actions */
+    .footer-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 32px;
+      padding-top: 24px;
       border-top: 1px solid var(--border);
     }
     
-    .link-result{
+    .link-result {
       background: rgba(15, 23, 42, 0.7);
-      padding:14px;
-      border-radius:8px;
-      border:1.5px dashed var(--border);
+      padding: 16px;
+      border-radius: var(--radius);
+      border: 1.5px solid var(--border);
       transition: var(--transition);
-      min-height: 54px;
+      min-height: 60px;
       display: flex;
       align-items: center;
-      color: var(--accent);
+      color: var(--text-primary);
+      word-break: break-all;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
     }
     
     .link-result.active {
@@ -321,137 +516,144 @@
       background: rgba(59, 130, 246, 0.1);
     }
     
-    /* modal */
-    .modal-back{
-      position:fixed;
-      inset:0;
-      background:rgba(0,0,0,0.7);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding:18px;
-      z-index:60;
+    /* Modals */
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 1000;
+      backdrop-filter: blur(5px);
       animation: fadeIn 0.3s ease-out;
     }
     
-    .modal{
-      width:100%;
-      max-width:520px;
-      background:var(--card);
-      border-radius:16px;
-      padding:24px;
-      box-shadow:var(--shadow-lg);
-      animation: slideUp 0.3s ease-out;
+    .modal {
+      width: 100%;
+      max-width: 540px;
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      box-shadow: var(--shadow-xl);
+      animation: slideUp 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
       max-height: 90vh;
       overflow-y: auto;
       border: 1px solid var(--border);
     }
     
-    .platform-item{
-      display:flex;
-      align-items:center;
-      gap:14px;
-      padding:14px;
-      border-radius:10px;
-      cursor:pointer;
-      transition: var(--transition);
-      margin-bottom: 8px;
-      border: 1.5px solid transparent;
-      background: rgba(15, 23, 42, 0.5);
-    }
-    
-    .platform-item:hover{
-      background: rgba(30, 41, 59, 0.8);
-      transform: translateX(-4px);
-      border-color: var(--primary);
-    }
-    
-    .platform-icon{
-      width:48px;
-      height:48px;
-      border-radius:10px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      color:white;
-      font-weight:700;
-      font-size: 18px;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-    }
-    
-    .platform-y{background:linear-gradient(135deg, #ff2b2b, #cc0000)}
-    .platform-f{background:linear-gradient(135deg, #1877f2, #0e5cb8)}
-    .platform-i{background:linear-gradient(135deg, #d6249f, #a81c7c)}
-    .platform-d{background:linear-gradient(135deg, #5865f2, #3c45a5)}
-    .platform-t{background:linear-gradient(135deg, #0088cc, #006699)}
-    
-    .actions{
-      margin-top:16px;
-    }
-    
-    .action-btn{
-      display:block;
-      padding:12px;
-      border-radius:10px;
-      background:var(--red);
-      color:white;
-      text-align:right;
-      margin-bottom:10px;
-      border:none;
-      cursor:pointer;
-      transition: var(--transition);
-    }
-    
-    .add-step{
-      display:flex;
-      gap:12px;
-      align-items:center;
-      margin-top:16px;
-    }
-    
-    .hint{
-      font-size:13px;
-      color:var(--muted);
-      margin-top:6px;
-      padding: 8px 12px;
-      background: rgba(100, 116, 139, 0.1);
-      border-radius: 6px;
-      border-right: 3px solid var(--muted);
-    }
-    
-    .id-input {
-      max-width:260px;
-    }
-    
-    .muted-ghost{
-      color:#94a3b8;
-      font-size:13px;
-      line-height: 1.5;
-    }
-    
-    .form-section {
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 24px;
     }
     
-    .form-section-title {
-      font-size: 18px;
-      font-weight: 600;
-      margin-bottom: 16px;
-      color: var(--accent);
+    .modal-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    
+    /* Platform Items */
+    .platform-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    
+    .platform-item {
+      background: var(--bg-light);
+      border-radius: var(--radius);
+      padding: 20px;
+      cursor: pointer;
+      transition: var(--transition);
+      border: 1.5px solid transparent;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 16px;
     }
     
-    .form-section-title:before {
+    .platform-item:hover {
+      border-color: var(--primary);
+      background: var(--bg-lighter);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
+    }
+    
+    .platform-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+    
+    .platform-youtube { background: linear-gradient(135deg, #ff0000, #cc0000); }
+    .platform-facebook { background: linear-gradient(135deg, #1877f2, #0e5cb8); }
+    .platform-instagram { background: linear-gradient(135deg, #d6249f, #a81c7c); }
+    .platform-discord { background: linear-gradient(135deg, #5865f2, #3c45a5); }
+    .platform-telegram { background: linear-gradient(135deg, #0088cc, #006699); }
+    
+    .platform-info {
+      flex: 1;
+    }
+    
+    .platform-name {
+      font-weight: 700;
+      font-size: 16px;
+      margin-bottom: 6px;
+    }
+    
+    .platform-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    
+    /* Status Indicators */
+    .status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: rgba(15, 23, 42, 0.7);
+      border-radius: var(--radius);
+      border-right: 4px solid var(--primary);
+      margin-top: 20px;
+    }
+    
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--success);
+      position: relative;
+    }
+    
+    .status-dot::after {
       content: '';
-      display: block;
-      width: 6px;
-      height: 20px;
-      background: var(--primary);
-      border-radius: 3px;
+      position: absolute;
+      top: -3px;
+      right: -3px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--success);
+      opacity: 0.3;
+      animation: pulse 2s infinite;
     }
     
+    /* Animations */
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
@@ -460,7 +662,7 @@
     @keyframes slideUp {
       from { 
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(30px);
       }
       to { 
         opacity: 1;
@@ -469,229 +671,419 @@
     }
     
     @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
+      0% { transform: scale(1); opacity: 0.3; }
+      50% { transform: scale(1.1); opacity: 0.5; }
+      100% { transform: scale(1); opacity: 0.3; }
     }
     
-    .pulse {
-      animation: pulse 1.5s infinite;
+    @keyframes shimmer {
+      0% { background-position: -200px 0; }
+      100% { background-position: 200px 0; }
     }
     
-    @media (max-width:600px){
-      .row{flex-direction:column}
-      .footer{flex-direction:column;gap:16px}
-      .id-input {max-width: 100%}
-      .card {padding: 20px;}
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .container {
+        padding: 0;
+      }
+      
+      .card {
+        padding: 24px;
+      }
+      
       .header {
         flex-direction: column;
         align-items: flex-start;
-        gap: 16px;
+        gap: 20px;
       }
+      
+      .form-row {
+        flex-direction: column;
+        gap: 0;
+      }
+      
+      .footer-actions {
+        flex-direction: column;
+        gap: 20px;
+      }
+      
+      .link-result {
+        width: 100%;
+      }
+      
+      .platform-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      body {
+        padding: 15px;
+      }
+      
+      .card {
+        padding: 20px;
+      }
+      
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .btn-group {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+      }
+    }
+    
+    /* Loading State */
+    .loading {
+      background: linear-gradient(90deg, #1e293b 0%, #2d3748 50%, #1e293b 100%);
+      background-size: 200px 100%;
+      animation: shimmer 1.5s infinite;
+    }
+    
+    /* Success Message */
+    .alert-success {
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #10b981;
+    }
+    
+    .alert-success i {
+      font-size: 20px;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- رأس الصفحة مع اللوجو واسم الموقع -->
+    <!-- Header -->
     <div class="header">
       <div class="logo-container">
-        <div class="logo-placeholder">SX</div>
-        <div>
-          <div class="site-name">Subx.click</div>
-          <div class="site-tagline">منشئ روابط المهام المتقدمة</div>
+        <div class="logo">
+          SX
+        </div>
+        <div class="brand">
+          <h1 class="site-name">Subx.click</h1>
+          <p class="site-tagline">منشئ روابط المهام المتقدمة - إدارة حملات التسويق الرقمي</p>
         </div>
       </div>
-      <div style="text-align: left;">
-        <div class="small" style="color: var(--muted);">إصدار 1.0</div>
-        <div class="small" style="color: var(--primary);">Link Tasks Creator</div>
+      <div class="version-badge">
+        <i class="fas fa-code-branch"></i>
+        <span>الإصدار 2.0</span>
       </div>
     </div>
-    
+
+    <!-- Main Card -->
     <div class="card">
-      <h1>إنشاء رابط مهام (Link + Tasks)</h1>
-      
-      <div class="form-section">
-        <div class="form-section-title">المعلومات الأساسية</div>
-        
-        <label>صورة الغلاف</label>
-        <div class="cover-box" id="coverBox">
-          <div style="text-align: center;">
-            <div style="font-size: 40px; margin-bottom: 8px;">📷</div>
-            <div>أضغط لاختيار صورة (JPG, PNG)</div>
-            <div class="small" style="margin-top: 4px;">نسبة مقترحة 16:9</div>
-          </div>
-          <input type="file" id="coverInput" accept="image/*" style="display:none" />
+      <div class="card-header">
+        <div>
+          <h2 class="card-title">
+            <i class="fas fa-link"></i>
+            إنشاء رابط مهام (Link + Tasks)
+          </h2>
+          <p class="card-subtitle">أنشئ روابط ذكية تطلب من المستخدمين إكمال مهام قبل الوصول إلى المحتوى</p>
         </div>
-
-        <label>الاسم (العنوان)</label>
-        <input id="title" type="text" placeholder="أدخل عنوان..." />
-
-        <label>الوصف المختصر</label>
-        <textarea id="description" placeholder="وصف مختصر..."></textarea>
-      </div>
-      
-      <div class="form-section">
-        <div class="form-section-title">إعدادات المنصة</div>
-        
-        <div class="row" style="margin-top:10px">
-          <div class="flex">
-            <label>I'd</label>
-            <input id="idField" class="id-input" type="text" placeholder="مثال: myChannel123 (حقل I'd)" />
-          </div>
-          <div style="width:160px">
-            <label>المنصة</label>
-            <select id="platformSelect">
-              <option value="">اختر منصة أو اضغط Manage</option>
-              <option value="youtube">YouTube</option>
-              <option value="facebook">Facebook</option>
-              <option value="instagram">Instagram</option>
-              <option value="discord">Discord</option>
-              <option value="telegram">Telegram</option>
-            </select>
-          </div>
-          <div style="width:120px;align-self:end">
-            <button class="btn ghost" id="openPlatformBtn">ادارة المنصات</button>
-          </div>
-        </div>
-
-        <label style="margin-top:12px">اللينك النهائي (URL) - يفتح بعد تنفيذ المهام</label>
-        <input id="destination" type="url" placeholder="https://example.com" />
-      </div>
-
-      <div class="form-section">
-        <div class="form-section-title">المهام</div>
-        
-        <label>المهام المضافة</label>
-        <div id="tasksContainer" class="tasks-list">
-          <div class="hint">لم يتم إضافة مهام بعد — اختر منصة واضغط "Manage" أو اضغط إضافة مهمة.</div>
-        </div>
-
-        <div class="add-step">
-          <button class="btn secondary" id="openTaskModalBtn">
-            <span style="font-size: 18px;">+</span> إضافة مهمة
+        <div class="btn-group">
+          <button class="btn btn-outline btn-sm" id="helpBtn">
+            <i class="fas fa-question-circle"></i>
+            مساعدة
           </button>
-          <button class="btn ghost" id="clearTasks">مسح المهام</button>
         </div>
       </div>
 
-      <div class="meta">
-        <div class="muted-ghost">يمكن إضافة أكثر من مهمة، و لكل مهمة منصة ونوع (مثل: اشترك، لايك، تعليق)</div>
-        <div class="left">
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <div style="width: 8px; height: 8px; background: #10b981; border-radius: 50%;"></div>
-            <span class="small">Saved to Firebase</span>
+      <!-- Form Sections -->
+      <div class="form-section">
+        <h3 class="section-title">
+          <i class="fas fa-info-circle"></i>
+          المعلومات الأساسية
+        </h3>
+        
+        <div class="form-group">
+          <label class="form-label" for="coverInput">
+            صورة الغلاف
+            <span class="required">(اختياري)</span>
+          </label>
+          <div class="cover-box" id="coverBox">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <div>انقر لاختيار صورة</div>
+            <div class="small" style="margin-top: 8px; font-size: 13px;">JPG, PNG - نسبة مقترحة 16:9</div>
+            <input type="file" id="coverInput" accept="image/*" style="display:none" />
           </div>
         </div>
+
+        <div class="form-row">
+          <div class="form-col">
+            <div class="form-group">
+              <label class="form-label" for="title">
+                العنوان الرئيسي
+                <span class="required">*</span>
+              </label>
+              <input type="text" id="title" class="form-control" placeholder="أدخل عنوان الحملة..." />
+            </div>
+          </div>
+          <div class="form-col">
+            <div class="form-group">
+              <label class="form-label" for="idField">
+                المعرف (ID)
+                <span class="required">*</span>
+              </label>
+              <input type="text" id="idField" class="form-control" placeholder="مثال: myChannel123" />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="description">
+            الوصف التفصيلي
+            <span class="required">*</span>
+          </label>
+          <textarea id="description" class="form-control" placeholder="صف الحملة وأهدافها..."></textarea>
+        </div>
       </div>
 
-      <div class="footer">
-        <div style="display: flex; gap: 12px;">
-          <button class="btn pulse" id="createBtn">Create Link</button>
-          <button class="btn ghost" id="previewBtn">معاينة</button>
+      <!-- Platform Settings -->
+      <div class="form-section">
+        <h3 class="section-title">
+          <i class="fas fa-cogs"></i>
+          إعدادات المنصة
+        </h3>
+        
+        <div class="form-row">
+          <div class="form-col">
+            <div class="form-group">
+              <label class="form-label" for="platformSelect">المنصة الرئيسية</label>
+              <select id="platformSelect" class="form-control">
+                <option value="">اختر منصة</option>
+                <option value="youtube">YouTube</option>
+                <option value="facebook">Facebook</option>
+                <option value="instagram">Instagram</option>
+                <option value="discord">Discord</option>
+                <option value="telegram">Telegram</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-col">
+            <div class="form-group">
+              <label class="form-label" for="destination">
+                رابط الوجهة النهائي
+                <span class="required">*</span>
+              </label>
+              <input type="url" id="destination" class="form-control" placeholder="https://example.com" />
+            </div>
+          </div>
         </div>
-        <div style="min-width:260px">
-          <label class="small">الرابط الناتج</label>
-          <div id="resultBox" class="link-result">لم يتم الإنشاء بعد</div>
+
+        <div class="form-group" style="margin-top: 20px;">
+          <button class="btn btn-secondary" id="openPlatformBtn">
+            <i class="fas fa-plus-circle"></i>
+            إدارة المنصات والمهام
+          </button>
+        </div>
+      </div>
+
+      <!-- Tasks Section -->
+      <div class="form-section">
+        <h3 class="section-title">
+          <i class="fas fa-tasks"></i>
+          المهام المضافة
+        </h3>
+        
+        <div id="tasksContainer" class="tasks-list">
+          <div class="empty-state" id="emptyTasksState">
+            <i class="fas fa-clipboard-list"></i>
+            <p>لم يتم إضافة مهام بعد</p>
+            <p class="small" style="margin-top: 8px;">استخدم زر "إدارة المنصات والمهام" لإضافة مهام جديدة</p>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-top: 20px;">
+          <button class="btn btn-outline" id="clearTasks">
+            <i class="fas fa-trash-alt"></i>
+            مسح جميع المهام
+          </button>
+        </div>
+      </div>
+
+      <!-- Status Indicator -->
+      <div class="status-indicator">
+        <div class="status-dot"></div>
+        <div>
+          <div style="font-weight: 600;">جاهز للحفظ</div>
+          <div class="small" style="margin-top: 4px;">سيتم حفظ بياناتك تلقائياً على Firebase</div>
+        </div>
+      </div>
+
+      <!-- Footer Actions -->
+      <div class="footer-actions">
+        <div style="display: flex; gap: 12px;">
+          <button class="btn btn-primary" id="createBtn">
+            <i class="fas fa-bolt"></i>
+            إنشاء الرابط
+          </button>
+          <button class="btn btn-outline" id="previewBtn">
+            <i class="fas fa-eye"></i>
+            معاينة
+          </button>
+        </div>
+        
+        <div style="flex: 1; max-width: 400px;">
+          <label class="form-label">الرابط الناتج</label>
+          <div id="resultBox" class="link-result">
+            <i class="fas fa-link" style="margin-left: 10px;"></i>
+            <span>لم يتم الإنشاء بعد</span>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Modal: منصات -->
-  <div class="modal-back" id="platformModal">
-    <div class="modal" role="dialog" aria-modal="true">
-      <div style="display:flex;justify-content:space-between;align-items:center; margin-bottom: 16px;">
-        <strong style="font-size: 18px;">اختر منصة</strong>
-        <button id="closePlatform" class="btn ghost">إغلاق</button>
+  <!-- Platform Modal -->
+  <div class="modal-backdrop" id="platformModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">
+          <i class="fas fa-layer-group"></i>
+          إدارة المنصات والمهام
+        </h3>
+        <button id="closePlatform" class="btn btn-outline btn-icon">
+          <i class="fas fa-times"></i>
+        </button>
       </div>
 
-      <div>
+      <div class="platform-grid">
         <div class="platform-item" data-platform="youtube">
-          <div class="platform-icon platform-y">YT</div>
-          <div>
-            <div><strong>YouTube</strong></div>
-            <div class="small">مهام: Subscribe, Like, Comment, Share, etc.</div>
+          <div class="platform-icon platform-youtube">
+            <i class="fab fa-youtube"></i>
+          </div>
+          <div class="platform-info">
+            <div class="platform-name">YouTube</div>
+            <div class="platform-desc">اشتراك، إعجاب، تعليق، مشاركة</div>
           </div>
         </div>
 
         <div class="platform-item" data-platform="facebook">
-          <div class="platform-icon platform-f">F</div>
-          <div>
-            <div><strong>Facebook</strong></div>
-            <div class="small">Like page / Share / Comment</div>
+          <div class="platform-icon platform-facebook">
+            <i class="fab fa-facebook"></i>
+          </div>
+          <div class="platform-info">
+            <div class="platform-name">Facebook</div>
+            <div class="platform-desc">إعجاب بالصفحة، مشاركة، تعليق</div>
           </div>
         </div>
 
         <div class="platform-item" data-platform="instagram">
-          <div class="platform-icon platform-i">IG</div>
-          <div>
-            <div><strong>Instagram</strong></div>
-            <div class="small">Follow / Like / Comment / DM</div>
+          <div class="platform-icon platform-instagram">
+            <i class="fab fa-instagram"></i>
+          </div>
+          <div class="platform-info">
+            <div class="platform-name">Instagram</div>
+            <div class="platform-desc">متابعة، إعجاب، تعليق، رسالة</div>
           </div>
         </div>
 
         <div class="platform-item" data-platform="discord">
-          <div class="platform-icon platform-d">DC</div>
-          <div>
-            <div><strong>Discord</strong></div>
-            <div class="small">Join server / Send message</div>
+          <div class="platform-icon platform-discord">
+            <i class="fab fa-discord"></i>
+          </div>
+          <div class="platform-info">
+            <div class="platform-name">Discord</div>
+            <div class="platform-desc">انضمام للسيرفر، إرسال رسالة</div>
           </div>
         </div>
 
         <div class="platform-item" data-platform="telegram">
-          <div class="platform-icon platform-t">TG</div>
-          <div>
-            <div><strong>Telegram</strong></div>
-            <div class="small">Join channel / Send message</div>
+          <div class="platform-icon platform-telegram">
+            <i class="fab fa-telegram"></i>
+          </div>
+          <div class="platform-info">
+            <div class="platform-name">Telegram</div>
+            <div class="platform-desc">انضمام للقناة، إرسال رسالة</div>
           </div>
         </div>
+      </div>
+
+      <div style="margin-top: 24px;">
+        <button class="btn btn-secondary" style="width: 100%;" id="openTaskModalBtn">
+          <i class="fas fa-plus-circle"></i>
+          إضافة مهمة مخصصة
+        </button>
       </div>
     </div>
   </div>
 
-  <!-- Modal: إضافة مهمة -->
-  <div class="modal-back" id="taskModal">
+  <!-- Task Modal -->
+  <div class="modal-backdrop" id="taskModal">
     <div class="modal">
-      <div style="display:flex;justify-content:space-between;align-items:center; margin-bottom: 16px;">
-        <strong id="taskModalTitle" style="font-size: 18px;">إضافة مهمة</strong>
-        <button id="closeTaskModal" class="btn ghost">إغلاق</button>
+      <div class="modal-header">
+        <h3 class="modal-title" id="taskModalTitle">
+          <i class="fas fa-tasks"></i>
+          إضافة مهمة جديدة
+        </h3>
+        <button id="closeTaskModal" class="btn btn-outline btn-icon">
+          <i class="fas fa-times"></i>
+        </button>
       </div>
 
-      <div>
-        <label>المنصة</label>
-        <select id="taskPlatform">
+      <div class="form-group">
+        <label class="form-label" for="taskPlatform">المنصة</label>
+        <select id="taskPlatform" class="form-control">
           <option value="youtube">YouTube</option>
           <option value="facebook">Facebook</option>
           <option value="instagram">Instagram</option>
           <option value="discord">Discord</option>
           <option value="telegram">Telegram</option>
         </select>
+      </div>
 
-        <label>نوع المهمة</label>
-        <select id="taskType"></select>
+      <div class="form-group">
+        <label class="form-label" for="taskType">نوع المهمة</label>
+        <select id="taskType" class="form-control"></select>
+      </div>
 
-        <label>رابط (مثال: فيديو يوتيوب أو صفحة فيسبوك) - اختياري</label>
-        <input id="taskLink" type="url" placeholder="https://..." />
+      <div class="form-group">
+        <label class="form-label" for="taskLink">
+          الرابط المستهدف
+          <span class="required">(اختياري)</span>
+        </label>
+        <input type="url" id="taskLink" class="form-control" placeholder="https://..." />
+      </div>
 
-        <label>تعليمات إضافية (اختياري)</label>
-        <input id="taskNote" type="text" placeholder="مثال: اكتب 'جربت' في التعليقات" />
+      <div class="form-group">
+        <label class="form-label" for="taskNote">
+          تعليمات إضافية
+          <span class="required">(اختياري)</span>
+        </label>
+        <input type="text" id="taskNote" class="form-control" placeholder="مثال: اكتب 'جربت' في التعليقات" />
+      </div>
 
-        <div style="margin-top:20px;display:flex;gap:10px;justify-content:flex-end">
-          <button id="addTaskBtn" class="btn">حفظ المهمة</button>
-        </div>
+      <div class="form-group" style="margin-top: 24px; display: flex; gap: 12px;">
+        <button id="addTaskBtn" class="btn btn-primary" style="flex: 1;">
+          <i class="fas fa-check-circle"></i>
+          حفظ المهمة
+        </button>
+        <button id="cancelTaskBtn" class="btn btn-outline" style="flex: 1;">
+          إلغاء
+        </button>
       </div>
     </div>
   </div>
 
-  <!-- Firebase SDKs (compat for simplicity) -->
+  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
 
   <script>
-    // ====== ضع إعدادات Firebase هنا ======
-    // أنشئ مشروع في Firebase ثم انسخ config هنا:
+    // Firebase Configuration
     const firebaseConfig = {
       apiKey: "AIzaSyBoPJbx5v6EkOqxOJkbhzHqIJdAByh79Rg",
       authDomain: "hhhhhh-d4fb8.firebaseapp.com",
@@ -702,246 +1094,516 @@
       appId: "1:24512338206:web:dfe045db59bd3434a2110f",
       measurementId: "G-HD4R7GNQ5H"
     };
-    // =====================================
+    
+    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
     const storage = firebase.storage();
 
-    // عناصر الواجهة
-    const coverBox = document.getElementById('coverBox');
-    const coverInput = document.getElementById('coverInput');
-    const titleInput = document.getElementById('title');
-    const descInput = document.getElementById('description');
-    const idInput = document.getElementById('idField');
-    const destinationInput = document.getElementById('destination');
-    const tasksContainer = document.getElementById('tasksContainer');
-    const createBtn = document.getElementById('createBtn');
-    const resultBox = document.getElementById('resultBox');
-    const openPlatformBtn = document.getElementById('openPlatformBtn');
-    const platformModal = document.getElementById('platformModal');
-    const closePlatform = document.getElementById('closePlatform');
-    const platformItems = document.querySelectorAll('.platform-item');
-    const platformSelect = document.getElementById('platformSelect');
+    // DOM Elements
+    const elements = {
+      coverBox: document.getElementById('coverBox'),
+      coverInput: document.getElementById('coverInput'),
+      titleInput: document.getElementById('title'),
+      descInput: document.getElementById('description'),
+      idInput: document.getElementById('idField'),
+      destinationInput: document.getElementById('destination'),
+      tasksContainer: document.getElementById('tasksContainer'),
+      emptyTasksState: document.getElementById('emptyTasksState'),
+      createBtn: document.getElementById('createBtn'),
+      resultBox: document.getElementById('resultBox'),
+      openPlatformBtn: document.getElementById('openPlatformBtn'),
+      platformModal: document.getElementById('platformModal'),
+      closePlatform: document.getElementById('closePlatform'),
+      platformItems: document.querySelectorAll('.platform-item'),
+      platformSelect: document.getElementById('platformSelect'),
+      openTaskModalBtn: document.getElementById('openTaskModalBtn'),
+      taskModal: document.getElementById('taskModal'),
+      closeTaskModal: document.getElementById('closeTaskModal'),
+      cancelTaskBtn: document.getElementById('cancelTaskBtn'),
+      taskPlatform: document.getElementById('taskPlatform'),
+      taskType: document.getElementById('taskType'),
+      taskLink: document.getElementById('taskLink'),
+      taskNote: document.getElementById('taskNote'),
+      addTaskBtn: document.getElementById('addTaskBtn'),
+      clearTasks: document.getElementById('clearTasks'),
+      previewBtn: document.getElementById('previewBtn'),
+      helpBtn: document.getElementById('helpBtn')
+    };
 
-    const openTaskModalBtn = document.getElementById('openTaskModalBtn');
-    const taskModal = document.getElementById('taskModal');
-    const closeTaskModal = document.getElementById('closeTaskModal');
-    const taskPlatform = document.getElementById('taskPlatform');
-    const taskType = document.getElementById('taskType');
-    const taskLink = document.getElementById('taskLink');
-    const taskNote = document.getElementById('taskNote');
-    const addTaskBtn = document.getElementById('addTaskBtn');
-    const clearTasks = document.getElementById('clearTasks');
-    const previewBtn = document.getElementById('previewBtn');
-
-    // تهيئة بيانات المهام المتاحة لكل منصة
+    // Platform Actions Data
     const platformActions = {
       youtube: [
-        {key:'subscribe', label:'Subscribe to channel'},
-        {key:'subscribe_notify', label:'Subscribe & enable notifications'},
-        {key:'like', label:'Like video'},
-        {key:'comment', label:'Comment on video'},
-        {key:'like_comment', label:'Like & Comment video'},
-        {key:'vote', label:'Vote on community post'},
-        {key:'share', label:'Share video'}
+        {key:'subscribe', label:'اشتراك في القناة', icon:'fas fa-user-plus'},
+        {key:'subscribe_notify', label:'اشتراك مع تفعيل الإشعارات', icon:'fas fa-bell'},
+        {key:'like', label:'إعجاب بالفيديو', icon:'fas fa-thumbs-up'},
+        {key:'comment', label:'تعليق على الفيديو', icon:'fas fa-comment'},
+        {key:'like_comment', label:'إعجاب وتعليق', icon:'fas fa-comment-medical'},
+        {key:'share', label:'مشاركة الفيديو', icon:'fas fa-share'},
+        {key:'watch_time', label:'مشاهدة حتى النهاية', icon:'fas fa-clock'}
       ],
       facebook: [
-        {key:'like_page', label:'Like page'},
-        {key:'share_post', label:'Share post'},
-        {key:'comment', label:'Comment'}
+        {key:'like_page', label:'إعجاب بالصفحة', icon:'fas fa-thumbs-up'},
+        {key:'follow', label:'متابعة الصفحة', icon:'fas fa-user-plus'},
+        {key:'share_post', label:'مشاركة المنشور', icon:'fas fa-share'},
+        {key:'comment', label:'تعليق على المنشور', icon:'fas fa-comment'},
+        {key:'react', label:'تفاعل مع المنشور', icon:'fas fa-smile'}
       ],
       instagram: [
-        {key:'follow', label:'Follow account'},
-        {key:'like', label:'Like post'},
-        {key:'comment', label:'Comment'}
+        {key:'follow', label:'متابعة الحساب', icon:'fas fa-user-plus'},
+        {key:'like', label:'إعجاب بالمنشور', icon:'fas fa-heart'},
+        {key:'comment', label:'تعليق على المنشور', icon:'fas fa-comment'},
+        {key:'save', label:'حفظ المنشور', icon:'fas fa-bookmark'},
+        {key:'story', label:'مشاركة في الستوري', icon:'fas fa-history'}
       ],
       discord: [
-        {key:'join', label:'Join server'},
-        {key:'message', label:'Send message in channel'}
+        {key:'join', label:'الانضمام للسيرفر', icon:'fas fa-door-open'},
+        {key:'react', label:'تفاعل مع رسالة', icon:'fas fa-smile'},
+        {key:'message', label:'إرسال رسالة', icon:'fas fa-comment'},
+        {key:'role', label:'الحصول على رتبة', icon:'fas fa-crown'}
       ],
       telegram: [
-        {key:'join', label:'Join channel/group'},
-        {key:'message', label:'Send message'}
+        {key:'join', label:'الانضمام للقناة/المجموعة', icon:'fas fa-door-open'},
+        {key:'message', label:'إرسال رسالة', icon:'fas fa-comment'},
+        {key:'react', label:'تفاعل مع رسالة', icon:'fas fa-smile'},
+        {key:'forward', label:'إعادة توجيه الرسالة', icon:'fas fa-share'}
       ]
     };
 
-    // state
-    let coverFile = null;
-    let tasks = []; // each: {platform, typeKey, typeLabel, link, note}
+    // Platform Icons and Colors
+    const platformConfig = {
+      youtube: { icon: 'fab fa-youtube', color: '#FF0000', bg: 'platform-youtube' },
+      facebook: { icon: 'fab fa-facebook', color: '#1877F2', bg: 'platform-facebook' },
+      instagram: { icon: 'fab fa-instagram', color: '#E4405F', bg: 'platform-instagram' },
+      discord: { icon: 'fab fa-discord', color: '#5865F2', bg: 'platform-discord' },
+      telegram: { icon: 'fab fa-telegram', color: '#0088CC', bg: 'platform-telegram' }
+    };
 
-    // helpers
-    function renderTasks(){
-      tasksContainer.innerHTML = '';
-      if(tasks.length === 0){
-        tasksContainer.innerHTML = '<div class="hint">لم يتم إضافة مهام بعد — اختر منصة واضغط "Manage" أو اضغط إضافة مهمة.</div>';
-        return;
+    // Application State
+    let state = {
+      coverFile: null,
+      tasks: [],
+      isLoading: false
+    };
+
+    // Utility Functions
+    const utils = {
+      showLoading(btn) {
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري المعالجة...';
+        btn.disabled = true;
+      },
+      
+      hideLoading(btn, text) {
+        btn.innerHTML = text;
+        btn.disabled = false;
+      },
+      
+      showModal(modal) {
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      },
+      
+      hideModal(modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+      },
+      
+      validateForm() {
+        const title = elements.titleInput.value.trim();
+        const id = elements.idInput.value.trim();
+        const destination = elements.destinationInput.value.trim();
+        
+        if (!title) {
+          alert('الرجاء إدخال عنوان الحملة');
+          elements.titleInput.focus();
+          return false;
+        }
+        
+        if (!id) {
+          alert('الرجاء إدخال معرف الحملة');
+          elements.idInput.focus();
+          return false;
+        }
+        
+        if (!destination) {
+          alert('الرجاء إدخال رابط الوجهة النهائي');
+          elements.destinationInput.focus();
+          return false;
+        }
+        
+        return true;
       }
-      tasks.forEach((t, idx) => {
-        const pill = document.createElement('div');
-        pill.className = 'task-pill';
-        pill.innerHTML = `
-          <div style="text-align:right">
-            <div style="font-weight:600">${t.typeLabel}</div>
-            <div class="small" style="color:var(--muted)">${t.platform} ${t.link? '• '+t.link : ''} ${t.note? '• '+t.note : ''}</div>
-          </div>
-          <div style="margin-inline-start:8px;display:flex;align-items:center">
-            <button class="x" data-idx="${idx}">×</button>
-          </div>
-        `;
-        tasksContainer.appendChild(pill);
+    };
+
+    // Task Management
+    const taskManager = {
+      renderTasks() {
+        elements.tasksContainer.innerHTML = '';
+        
+        if (state.tasks.length === 0) {
+          elements.emptyTasksState.style.display = 'block';
+          return;
+        }
+        
+        elements.emptyTasksState.style.display = 'none';
+        
+        state.tasks.forEach((task, index) => {
+          const config = platformConfig[task.platform];
+          const taskDiv = document.createElement('div');
+          taskDiv.className = 'task-item';
+          taskDiv.innerHTML = `
+            <div class="task-info">
+              <div class="task-icon ${config.bg}">
+                <i class="${config.icon}"></i>
+              </div>
+              <div class="task-content">
+                <div class="task-title">${task.typeLabel}</div>
+                <div class="task-details">
+                  <span>${this.getPlatformName(task.platform)}</span>
+                  ${task.link ? `<span><i class="fas fa-link"></i> ${this.truncateText(task.link, 30)}</span>` : ''}
+                  ${task.note ? `<span><i class="fas fa-sticky-note"></i> ${task.note}</span>` : ''}
+                </div>
+              </div>
+            </div>
+            <div class="task-actions">
+              <button class="btn btn-outline btn-icon btn-sm" onclick="taskManager.editTask(${index})" title="تعديل">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="btn btn-outline btn-icon btn-sm" onclick="taskManager.removeTask(${index})" title="حذف">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          `;
+          elements.tasksContainer.appendChild(taskDiv);
+        });
+      },
+      
+      getPlatformName(platform) {
+        const names = {
+          youtube: 'YouTube',
+          facebook: 'Facebook',
+          instagram: 'Instagram',
+          discord: 'Discord',
+          telegram: 'Telegram'
+        };
+        return names[platform] || platform;
+      },
+      
+      truncateText(text, maxLength) {
+        if (text.length <= maxLength) return text;
+        return text.substring(0, maxLength) + '...';
+      },
+      
+      addTask(platform, typeKey, typeLabel, link, note) {
+        state.tasks.push({
+          platform,
+          typeKey,
+          typeLabel,
+          link: link.trim(),
+          note: note.trim(),
+          id: Date.now() + Math.random().toString(36).substr(2, 9)
+        });
+        this.renderTasks();
+      },
+      
+      editTask(index) {
+        const task = state.tasks[index];
+        elements.taskPlatform.value = task.platform;
+        taskManager.populateTaskTypes(task.platform);
+        elements.taskType.value = task.typeKey;
+        elements.taskLink.value = task.link || '';
+        elements.taskNote.value = task.note || '';
+        state.editingIndex = index;
+        elements.taskModalTitle.innerHTML = '<i class="fas fa-edit"></i> تعديل المهمة';
+        utils.showModal(elements.taskModal);
+      },
+      
+      removeTask(index) {
+        if (confirm('هل أنت متأكد من حذف هذه المهمة؟')) {
+          state.tasks.splice(index, 1);
+          this.renderTasks();
+        }
+      },
+      
+      populateTaskTypes(platform) {
+        elements.taskType.innerHTML = '';
+        const actions = platformActions[platform] || [];
+        
+        actions.forEach(action => {
+          const option = document.createElement('option');
+          option.value = action.key;
+          option.textContent = action.label;
+          elements.taskType.appendChild(option);
+        });
+      },
+      
+      clearAllTasks() {
+        if (state.tasks.length === 0) {
+          alert('لا توجد مهام لحذفها');
+          return;
+        }
+        
+        if (confirm('هل أنت متأكد من حذف جميع المهام؟')) {
+          state.tasks = [];
+          this.renderTasks();
+        }
+      }
+    };
+
+    // Event Handlers
+    const setupEventHandlers = () => {
+      // Cover Image
+      elements.coverBox.addEventListener('click', () => elements.coverInput.click());
+      elements.coverInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        state.coverFile = file;
+        const url = URL.createObjectURL(file);
+        elements.coverBox.innerHTML = `<img src="${url}" alt="cover" />`;
       });
 
-      // attach remove handlers
-      document.querySelectorAll('.task-pill .x').forEach(btn=>{
-        btn.addEventListener('click',e=>{
-          const i = parseInt(e.target.dataset.idx);
-          tasks.splice(i,1);
-          renderTasks();
+      // Platform Modal
+      elements.openPlatformBtn.addEventListener('click', () => {
+        utils.showModal(elements.platformModal);
+      });
+      
+      elements.closePlatform.addEventListener('click', () => {
+        utils.hideModal(elements.platformModal);
+      });
+
+      // Platform Selection
+      elements.platformItems.forEach(item => {
+        item.addEventListener('click', () => {
+          const platform = item.dataset.platform;
+          elements.platformSelect.value = platform;
+          utils.hideModal(elements.platformModal);
+          
+          // Open task modal with preselected platform
+          elements.taskPlatform.value = platform;
+          taskManager.populateTaskTypes(platform);
+          elements.taskModalTitle.innerHTML = '<i class="fas fa-plus-circle"></i> إضافة مهمة جديدة';
+          utils.showModal(elements.taskModal);
         });
       });
-    }
 
-    // cover box click
-    coverBox.addEventListener('click',()=> coverInput.click());
-    coverInput.addEventListener('change',(e)=>{
-      const f = e.target.files[0];
-      if(!f) return;
-      coverFile = f;
-      const url = URL.createObjectURL(f);
-      coverBox.innerHTML = `<img src="${url}" alt="cover" />`;
-    });
-
-    // platform modal open/close
-    openPlatformBtn.addEventListener('click',()=>{ platformModal.style.display='flex'; });
-    closePlatform.addEventListener('click',()=>{ platformModal.style.display='none'; });
-
-    platformItems.forEach(it=>{
-      it.addEventListener('click',()=>{
-        const platform = it.dataset.platform;
-        platformSelect.value = platform;
-        platformModal.style.display='none';
-        // open task modal preselected
-        taskPlatform.value = platform;
-        populateTaskTypes(platform);
-        taskModal.style.display='flex';
+      // Task Modal
+      elements.openTaskModalBtn.addEventListener('click', () => {
+        const selectedPlatform = elements.platformSelect.value || 'youtube';
+        elements.taskPlatform.value = selectedPlatform;
+        taskManager.populateTaskTypes(selectedPlatform);
+        elements.taskModalTitle.innerHTML = '<i class="fas fa-plus-circle"></i> إضافة مهمة جديدة';
+        utils.showModal(elements.taskModal);
       });
-    });
-
-    // open task modal direct
-    openTaskModalBtn.addEventListener('click',()=>{
-      taskPlatform.value = platformSelect.value || 'youtube';
-      populateTaskTypes(taskPlatform.value);
-      taskModal.style.display='flex';
-    });
-    closeTaskModal.addEventListener('click',()=> taskModal.style.display='none');
-
-    // change taskPlatform -> update types
-    taskPlatform.addEventListener('change', (e)=> populateTaskTypes(e.target.value));
-
-    function populateTaskTypes(platform){
-      taskType.innerHTML = '';
-      const arr = platformActions[platform] || [];
-      arr.forEach(a=>{
-        const o = document.createElement('option');
-        o.value = a.key; o.textContent = a.label;
-        taskType.appendChild(o);
+      
+      elements.closeTaskModal.addEventListener('click', () => {
+        utils.hideModal(elements.taskModal);
+        delete state.editingIndex;
       });
-    }
-    // init populate
-    populateTaskTypes('youtube');
+      
+      elements.cancelTaskBtn.addEventListener('click', () => {
+        utils.hideModal(elements.taskModal);
+        delete state.editingIndex;
+      });
 
-    addTaskBtn.addEventListener('click', ()=>{
-      const p = taskPlatform.value;
-      const key = taskType.value;
-      const label = (platformActions[p].find(x=>x.key===key)||{}).label || key;
-      const link = taskLink.value.trim();
-      const note = taskNote.value.trim();
-      tasks.push({platform:p, typeKey:key, typeLabel:label, link, note});
-      taskLink.value=''; taskNote.value='';
-      taskModal.style.display='none';
-      renderTasks();
-    });
+      // Platform Change in Task Modal
+      elements.taskPlatform.addEventListener('change', (e) => {
+        taskManager.populateTaskTypes(e.target.value);
+      });
 
-    clearTasks.addEventListener('click',()=>{
-      if(!confirm('مسح كل المهام؟')) return;
-      tasks = [];
-      renderTasks();
-    });
-
-    previewBtn.addEventListener('click',()=>{
-      const preview = {
-        title: titleInput.value,
-        description: descInput.value,
-        idField: idInput.value,
-        destination: destinationInput.value,
-        tasks
-      };
-      resultBox.innerHTML = `<pre style="white-space:pre-wrap;font-size:13px">${JSON.stringify(preview,null,2)}</pre>`;
-      resultBox.classList.add('active');
-    });
-
-    // create link (save to Firebase)
-    createBtn.addEventListener('click', async ()=>{
-      createBtn.disabled = true;
-      createBtn.textContent = 'جاري الإنشاء...';
-      try{
-        // basic validation
-        const title = titleInput.value.trim();
-        const destination = destinationInput.value.trim();
-        if(!title){ alert('الرجاء إدخال عنوان'); createBtn.disabled=false; createBtn.textContent='Create Link'; return; }
-        if(!destination){ alert('الرجاء إدخال رابط الوجهة النهائي'); createBtn.disabled=false; createBtn.textContent='Create Link'; return; }
-        // upload cover if exists
-        let coverUrl = '';
-        if(coverFile){
-          const path = `covers/${Date.now()}_${coverFile.name.replace(/\s/g,'_')}`;
-          const ref = storage.ref().child(path);
-          const snap = await ref.put(coverFile);
-          coverUrl = await snap.ref.getDownloadURL();
+      // Add/Edit Task
+      elements.addTaskBtn.addEventListener('click', () => {
+        const platform = elements.taskPlatform.value;
+        const typeKey = elements.taskType.value;
+        const typeLabel = elements.taskType.options[elements.taskType.selectedIndex].text;
+        const link = elements.taskLink.value;
+        const note = elements.taskNote.value;
+        
+        if (!typeKey) {
+          alert('الرجاء اختيار نوع المهمة');
+          return;
         }
-
-        // build doc
-        const docData = {
-          title,
-          description: descInput.value.trim(),
-          idField: idInput.value.trim(),
-          destination,
-          coverUrl,
-          tasks,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        };
-        const docRef = await db.collection('links').add(docData);
-        const docId = docRef.id;
-        // construct friendly short link (tweak as needed)
-        const publicLink = `task.subx.click/?id=${idField}`;
-        resultBox.innerHTML = `<div>Created: <a href="${publicLink}" target="_blank" style="color: var(--primary); text-decoration: none;">${publicLink}</a><div class="small">Document ID: ${docId}</div></div>`;
-        resultBox.classList.add('active');
-      }catch(err){
-        console.error(err);
-        alert('حدث خطأ أثناء الحفظ: ' + (err.message || err));
-      }finally{
-        createBtn.disabled=false;
-        createBtn.textContent='Create Link';
-      }
-    });
-
-    // close modals clicking outside
-    document.querySelectorAll('.modal-back').forEach(m=>{
-      m.addEventListener('click',(e)=>{
-        if(e.target === m) m.style.display='none';
+        
+        if (typeof state.editingIndex !== 'undefined') {
+          // Edit existing task
+          state.tasks[state.editingIndex] = {
+            ...state.tasks[state.editingIndex],
+            platform,
+            typeKey,
+            typeLabel,
+            link: link.trim(),
+            note: note.trim()
+          };
+          delete state.editingIndex;
+        } else {
+          // Add new task
+          taskManager.addTask(platform, typeKey, typeLabel, link, note);
+        }
+        
+        // Reset form
+        elements.taskLink.value = '';
+        elements.taskNote.value = '';
+        utils.hideModal(elements.taskModal);
       });
-    });
 
-    // show platform-select change quick info
-    platformSelect.addEventListener('change',(e)=>{
-      const v = e.target.value;
-      if(!v) return;
-      // prefill task modal type
-      taskPlatform.value = v;
-      populateTaskTypes(v);
-    });
+      // Clear Tasks
+      elements.clearTasks.addEventListener('click', () => {
+        taskManager.clearAllTasks();
+      });
 
-    // initial render
-    renderTasks();
+      // Preview
+      elements.previewBtn.addEventListener('click', () => {
+        if (!utils.validateForm()) return;
+        
+        const previewData = {
+          title: elements.titleInput.value,
+          description: elements.descInput.value,
+          id: elements.idInput.value,
+          destination: elements.destinationInput.value,
+          tasks: state.tasks,
+          totalTasks: state.tasks.length
+        };
+        
+        elements.resultBox.innerHTML = `
+          <div style="display: flex; align-items: center;">
+            <i class="fas fa-eye" style="margin-left: 10px;"></i>
+            <div>
+              <strong>معاينة البيانات:</strong>
+              <div style="font-size: 12px; margin-top: 5px;">
+                العنوان: ${previewData.title}<br>
+                المهام: ${previewData.totalTasks} مهمة<br>
+                الرابط: ${previewData.destination}
+              </div>
+            </div>
+          </div>
+        `;
+        elements.resultBox.classList.add('active');
+        
+        // Show JSON data in console
+        console.log('Preview Data:', JSON.stringify(previewData, null, 2));
+      });
+
+      // Create Link
+      elements.createBtn.addEventListener('click', async () => {
+        if (!utils.validateForm()) return;
+        
+        if (state.tasks.length === 0) {
+          const addTasks = confirm('لم تقم بإضافة أي مهام. هل ترغب في المتابعة دون مهام؟');
+          if (!addTasks) return;
+        }
+        
+        utils.showLoading(elements.createBtn);
+        state.isLoading = true;
+        
+        try {
+          // Upload cover image if exists
+          let coverUrl = '';
+          if (state.coverFile) {
+            const path = `covers/${Date.now()}_${state.coverFile.name.replace(/\s/g, '_')}`;
+            const ref = storage.ref().child(path);
+            const snapshot = await ref.put(state.coverFile);
+            coverUrl = await snapshot.ref.getDownloadURL();
+          }
+          
+          // Prepare data for Firestore
+          const docData = {
+            title: elements.titleInput.value.trim(),
+            description: elements.descInput.value.trim(),
+            id: elements.idInput.value.trim(),
+            destination: elements.destinationInput.value.trim(),
+            platform: elements.platformSelect.value || 'multi',
+            coverUrl,
+            tasks: state.tasks,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            clicks: 0,
+            status: 'active'
+          };
+          
+          // Save to Firestore
+          const docRef = await db.collection('links').add(docData);
+          const docId = docRef.id;
+          
+          // Generate public link
+          const publicLink = `https://subx.click/t/${docId}`;
+          const shortLink = `subx.click/t/${docId}`;
+          
+          // Show success message
+          elements.resultBox.innerHTML = `
+            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+              <div>
+                <div style="font-weight: 600; color: var(--primary);">تم الإنشاء بنجاح!</div>
+                <div style="font-size: 12px; margin-top: 4px;">${shortLink}</div>
+              </div>
+              <button class="btn btn-outline btn-sm" onclick="navigator.clipboard.writeText('${publicLink}'); alert('تم نسخ الرابط')">
+                <i class="fas fa-copy"></i>
+              </button>
+            </div>
+          `;
+          elements.resultBox.classList.add('active');
+          
+          // Reset form (optional)
+          // resetForm();
+          
+        } catch (error) {
+          console.error('Error creating link:', error);
+          alert('حدث خطأ أثناء حفظ البيانات: ' + error.message);
+        } finally {
+          utils.hideLoading(elements.createBtn, '<i class="fas fa-bolt"></i> إنشاء الرابط');
+          state.isLoading = false;
+        }
+      });
+
+      // Help Button
+      elements.helpBtn.addEventListener('click', () => {
+        alert(`دليل الاستخدام السريع:
+
+1. أضف معلومات الحملة الأساسية (العنوان، الوصف، المعرف)
+2. اختر المنصة الرئيسية وأضف رابط الوجهة النهائي
+3. أضف المهام المطلوبة من المستخدمين (اشتراك، إعجاب، إلخ)
+4. اضغط "إنشاء الرابط" للحصول على رابط الحملة
+
+يمكنك إضافة أكثر من مهمة من منصات مختلفة في حملة واحدة.`);
+      });
+
+      // Close modals when clicking outside
+      document.querySelectorAll('.modal-backdrop').forEach(modal => {
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) {
+            utils.hideModal(modal);
+            if (modal === elements.taskModal) {
+              delete state.editingIndex;
+            }
+          }
+        });
+      });
+
+      // Platform select change
+      elements.platformSelect.addEventListener('change', (e) => {
+        if (e.target.value) {
+          elements.taskPlatform.value = e.target.value;
+          taskManager.populateTaskTypes(e.target.value);
+        }
+      });
+    };
+
+    // Initialize Application
+    const initApp = () => {
+      // Initialize task types
+      taskManager.populateTaskTypes('youtube');
+      
+      // Set up event handlers
+      setupEventHandlers();
+      
+      // Render initial tasks
+      taskManager.renderTasks();
+      
+      // Set focus to title input
+      elements.titleInput.focus();
+    };
+
+    // Start the application
+    document.addEventListener('DOMContentLoaded', initApp);
   </script>
 </body>
 </html>
