@@ -1,127 +1,683 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
   <title>التسجيل في عجلة الحظ</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
-
+  
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
   <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
   <style>
-    *{font-family:'Cairo',sans-serif;box-sizing:border-box}
-    body{
-      margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
-      background:radial-gradient(circle at top,#111,#000);
-      color:#fff
+    :root {
+      --primary: #ff2b2b;
+      --primary-light: #ff5c5c;
+      --primary-dark: #cc0000;
+      --secondary: #00c9ff;
+      --secondary-light: #6ee7ff;
+      --dark: #0a0a0a;
+      --darker: #050505;
+      --light: #ffffff;
+      --gray: #333333;
+      --gray-light: #444444;
+      --success: #00ff88;
+      --warning: #ffaa00;
+      --error: #ff3333;
+      --gold: #ffd700;
+      --silver: #c0c0c0;
+      --bronze: #cd7f32;
     }
-    .card{
-      width:100%;max-width:420px;
-      background:rgba(20,20,20,.85);
-      border:1px solid #ff2b2b;
-      border-radius:16px;
-      padding:22px;
-      box-shadow:0 0 25px rgba(255,43,43,.25)
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Cairo', sans-serif;
     }
-    h1{text-align:center;margin:5px 0 10px;font-size:22px}
-    .count{text-align:center;color:#ff6b6b;margin-bottom:20px}
-    label{display:block;margin:12px 0 6px;font-size:14px}
-    input{
-      width:100%;padding:12px;border-radius:10px;
-      border:1px solid #333;background:#0e0e0e;color:#fff
+    
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(ellipse at top, var(--darker) 0%, var(--dark) 70%);
+      color: var(--light);
+      overflow-x: hidden;
+      padding: 20px;
+      position: relative;
     }
-    input:focus{outline:none;border-color:#ff2b2b}
-    button{
-      width:100%;margin-top:18px;padding:13px;
-      border:none;border-radius:12px;
-      background:linear-gradient(135deg,#ff2b2b,#ff5c5c);
-      color:#fff;font-size:16px;font-weight:700;cursor:pointer
+    
+    /* Animated Background Elements */
+    .bg-particle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 43, 43, 0.1);
+      z-index: -1;
     }
-    button:disabled{opacity:.6;cursor:not-allowed}
-    .msg{text-align:center;margin-top:15px;font-size:14px}
+    
+    .wheel-bg {
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      border: 2px dashed rgba(255, 43, 43, 0.2);
+      z-index: -1;
+      animation: rotate 120s linear infinite;
+    }
+    
+    .wheel-bg:nth-child(2) {
+      width: 500px;
+      height: 500px;
+      border-color: rgba(0, 201, 255, 0.15);
+      animation-duration: 180s;
+    }
+    
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Card Styles */
+    .card {
+      width: 100%;
+      max-width: 480px;
+      background: rgba(15, 15, 15, 0.9);
+      border: 2px solid var(--primary);
+      border-radius: 24px;
+      padding: 30px;
+      box-shadow: 
+        0 10px 40px rgba(255, 43, 43, 0.25),
+        0 0 80px rgba(0, 201, 255, 0.15),
+        inset 0 0 20px rgba(255, 43, 43, 0.1);
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+      animation: fadeIn 0.8s ease-out;
+    }
+    
+    .card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255, 43, 43, 0.05) 0%, transparent 70%);
+      z-index: -1;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Header Styles */
+    .header {
+      text-align: center;
+      margin-bottom: 25px;
+      position: relative;
+    }
+    
+    .title-icon {
+      display: inline-block;
+      font-size: 42px;
+      color: var(--gold);
+      margin-bottom: 10px;
+      animation: pulse 2s infinite alternate;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.1); }
+    }
+    
+    h1 {
+      font-size: 28px;
+      font-weight: 800;
+      margin: 0 0 5px 0;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 2px 10px rgba(255, 43, 43, 0.3);
+    }
+    
+    .subtitle {
+      font-size: 16px;
+      color: #aaa;
+      margin-bottom: 10px;
+    }
+    
+    /* Counter Styles */
+    .counter-container {
+      background: rgba(10, 10, 10, 0.8);
+      border-radius: 16px;
+      padding: 15px;
+      margin-bottom: 30px;
+      text-align: center;
+      border: 1px solid var(--gray-light);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .counter-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+    }
+    
+    .counter-label {
+      font-size: 16px;
+      font-weight: 600;
+      color: #aaa;
+      margin-bottom: 8px;
+    }
+    
+    .counter-value {
+      font-size: 42px;
+      font-weight: 800;
+      color: var(--gold);
+      text-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+      transition: all 0.3s ease;
+    }
+    
+    .counter-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      font-size: 14px;
+      padding: 5px 12px;
+      border-radius: 20px;
+      margin-top: 10px;
+      font-weight: 600;
+      box-shadow: 0 4px 8px rgba(255, 43, 43, 0.3);
+    }
+    
+    /* Form Styles */
+    .form-group {
+      margin-bottom: 22px;
+      position: relative;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #ddd;
+      padding-right: 10px;
+    }
+    
+    label i {
+      margin-left: 8px;
+      color: var(--primary-light);
+    }
+    
+    .input-container {
+      position: relative;
+    }
+    
+    input {
+      width: 100%;
+      padding: 16px 20px 16px 50px;
+      border-radius: 14px;
+      border: 2px solid var(--gray);
+      background: rgba(10, 10, 10, 0.8);
+      color: var(--light);
+      font-size: 16px;
+      transition: all 0.3s ease;
+      direction: ltr;
+    }
+    
+    input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(255, 43, 43, 0.2);
+      background: rgba(20, 20, 20, 0.9);
+    }
+    
+    .input-icon {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--primary);
+      font-size: 18px;
+      z-index: 2;
+    }
+    
+    /* Button Styles */
+    .btn-container {
+      margin-top: 30px;
+      position: relative;
+    }
+    
+    button {
+      width: 100%;
+      padding: 18px;
+      border: none;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: var(--light);
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(255, 43, 43, 0.4);
+    }
+    
+    button:hover:not(:disabled) {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 25px rgba(255, 43, 43, 0.6);
+    }
+    
+    button:active:not(:disabled) {
+      transform: translateY(0);
+    }
+    
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    
+    .btn-icon {
+      margin-left: 10px;
+    }
+    
+    .btn-glow {
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.7s;
+    }
+    
+    button:hover:not(:disabled) .btn-glow {
+      left: 100%;
+    }
+    
+    /* Message Styles */
+    .message {
+      text-align: center;
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.4s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .message i {
+      margin-left: 10px;
+      font-size: 20px;
+    }
+    
+    .message.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .message.success {
+      background: rgba(0, 255, 136, 0.1);
+      color: var(--success);
+      border: 1px solid rgba(0, 255, 136, 0.3);
+    }
+    
+    .message.warning {
+      background: rgba(255, 170, 0, 0.1);
+      color: var(--warning);
+      border: 1px solid rgba(255, 170, 0, 0.3);
+    }
+    
+    .message.error {
+      background: rgba(255, 51, 51, 0.1);
+      color: var(--error);
+      border: 1px solid rgba(255, 51, 51, 0.3);
+    }
+    
+    /* Footer */
+    .footer {
+      text-align: center;
+      margin-top: 25px;
+      font-size: 14px;
+      color: #777;
+      padding-top: 15px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    /* Responsive */
+    @media (max-width: 600px) {
+      .card {
+        padding: 25px 20px;
+        max-width: 95%;
+      }
+      
+      h1 {
+        font-size: 24px;
+      }
+      
+      .counter-value {
+        font-size: 36px;
+      }
+      
+      input, button {
+        padding: 14px 14px 14px 50px;
+      }
+    }
   </style>
 </head>
 <body>
-
+  <!-- Background Elements -->
+  <div class="wheel-bg"></div>
+  <div class="wheel-bg"></div>
+  
+  <!-- Main Card -->
   <div class="card">
-    <h1>🎡 التسجيل في عجلة الحظ</h1>
-    <div class="count">عدد المشتركين: <span id="count">0</span></div>
-
-    <label>اسم Roblox</label>
-    <input id="roblox" placeholder="اكتب اسمك في Roblox">
-
-    <label>رقم واتساب</label>
-    <input id="whatsapp" placeholder="01xxxxxxxxx">
-
-    <button id="register">التسجيل في العجلة</button>
-    <div class="msg" id="msg"></div>
+    <div class="header">
+      <div class="title-icon">
+        <i class="fas fa-gem"></i>
+      </div>
+      <h1>التسجيل في عجلة الحظ</h1>
+      <p class="subtitle">سجل الآن واربح جوائز قيمة في سحب عجلة الحظ</p>
+    </div>
+    
+    <div class="counter-container">
+      <div class="counter-label">عدد المشتركين حتى الآن</div>
+      <div class="counter-value" id="count">0</div>
+      <div class="counter-badge">🎯 كن واحداً منهم!</div>
+    </div>
+    
+    <div class="form-group">
+      <label for="roblox"><i class="fas fa-user"></i> اسم Roblox</label>
+      <div class="input-container">
+        <div class="input-icon"><i class="fab fa-roblox"></i></div>
+        <input id="roblox" type="text" placeholder="اكتب اسمك في Roblox" autocomplete="off">
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label for="whatsapp"><i class="fab fa-whatsapp"></i> رقم واتساب</label>
+      <div class="input-container">
+        <div class="input-icon"><i class="fas fa-phone"></i></div>
+        <input id="whatsapp" type="tel" placeholder="01xxxxxxxxx" autocomplete="off">
+      </div>
+    </div>
+    
+    <div class="btn-container">
+      <button id="register">
+        <span class="btn-glow"></span>
+        <i class="fas fa-paper-plane btn-icon"></i> التسجيل في العجلة
+      </button>
+    </div>
+    
+    <div class="message" id="msg"></div>
+    
+    <div class="footer">
+      <p>© 2023 عجلة الحظ | جميع الحقوق محفوظة</p>
+      <p>سيتم الإعلان عن الفائزين عبر الواتساب</p>
+    </div>
   </div>
 
 <script>
-  // 🔹 Firebase Config (غير القيم)
+  // 🔹 Firebase Config
   const firebaseConfig = {
-  apiKey: "AIzaSyBoPJbx5v6EkOqxOJkbhzHqIJdAByh79Rg",
-  authDomain: "hhhhhh-d4fb8.firebaseapp.com",
-  databaseURL: "https://hhhhhh-d4fb8-default-rtdb.firebaseio.com",
-  projectId: "hhhhhh-d4fb8",
-  storageBucket: "hhhhhh-d4fb8.appspot.com",
-  messagingSenderId: "24512338206",
-  appId: "1:24512338206:web:dfe045db59bd3434a2110f",
-  measurementId: "G-HD4R7GNQ5H"
-};
+    apiKey: "AIzaSyBoPJbx5v6EkOqxOJkbhzHqIJdAByh79Rg",
+    authDomain: "hhhhhh-d4fb8.firebaseapp.com",
+    databaseURL: "https://hhhhhh-d4fb8-default-rtdb.firebaseio.com",
+    projectId: "hhhhhh-d4fb8",
+    storageBucket: "hhhhhh-d4fb8.appspot.com",
+    messagingSenderId: "24512338206",
+    appId: "1:24512338206:web:dfe045db59bd3434a2110f",
+    measurementId: "G-HD4R7GNQ5H"
+  };
 
+  // 🔹 Initialize Firebase
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
 
+  // 🔹 DOM Elements
   const countEl = document.getElementById('count');
-  const msg = document.getElementById('msg');
+  const msgEl = document.getElementById('msg');
   const btn = document.getElementById('register');
+  const robloxInput = document.getElementById('roblox');
+  const whatsappInput = document.getElementById('whatsapp');
 
-  // 🔹 جلب IP
-  async function getIP(){
-    const res = await fetch('https://api.ipify.org?format=json');
-    const data = await res.json();
-    return data.ip;
+  // 🔹 Create Background Particles
+  function createParticles() {
+    const particlesContainer = document.body;
+    const particleCount = 20;
+    
+    for (let i = 0; i < particleCount; i++) {
+      const particle = document.createElement('div');
+      particle.classList.add('bg-particle');
+      
+      const size = Math.random() * 10 + 5;
+      particle.style.width = `${size}px`;
+      particle.style.height = `${size}px`;
+      
+      particle.style.left = `${Math.random() * 100}vw`;
+      particle.style.top = `${Math.random() * 100}vh`;
+      
+      particle.style.background = i % 3 === 0 
+        ? 'rgba(255, 43, 43, 0.2)' 
+        : i % 3 === 1 
+          ? 'rgba(0, 201, 255, 0.2)' 
+          : 'rgba(255, 215, 0, 0.2)';
+      
+      particlesContainer.appendChild(particle);
+      
+      // Animate particle
+      animateParticle(particle);
+    }
+  }
+  
+  function animateParticle(particle) {
+    let x = parseFloat(particle.style.left);
+    let y = parseFloat(particle.style.top);
+    let xSpeed = (Math.random() - 0.5) * 0.5;
+    let ySpeed = (Math.random() - 0.5) * 0.5;
+    
+    function move() {
+      x += xSpeed;
+      y += ySpeed;
+      
+      if (x > 100 || x < 0) xSpeed *= -1;
+      if (y > 100 || y < 0) ySpeed *= -1;
+      
+      particle.style.left = `${x}vw`;
+      particle.style.top = `${y}vh`;
+      
+      requestAnimationFrame(move);
+    }
+    
+    move();
   }
 
-  // 🔹 عداد المشتركين
-  db.ref('wheel_users').on('value',snap=>{
-    countEl.textContent = snap.exists()?snap.numChildren():0;
+  // 🔹 Animate Counter
+  function animateCounter(element, targetValue) {
+    const currentValue = parseInt(element.textContent);
+    const duration = 800; // ms
+    const steps = 20;
+    const stepValue = (targetValue - currentValue) / steps;
+    let currentStep = 0;
+    
+    const counter = setInterval(() => {
+      currentStep++;
+      const newValue = Math.round(currentValue + (stepValue * currentStep));
+      element.textContent = newValue.toLocaleString('ar-EG');
+      
+      // Add pulse animation on each step
+      element.style.transform = 'scale(1.1)';
+      setTimeout(() => {
+        element.style.transform = 'scale(1)';
+      }, 50);
+      
+      if (currentStep >= steps) {
+        clearInterval(counter);
+        element.textContent = targetValue.toLocaleString('ar-EG');
+      }
+    }, duration / steps);
+  }
+
+  // 🔹 Show Message
+  function showMessage(text, type) {
+    msgEl.textContent = text;
+    msgEl.className = `message show ${type}`;
+    
+    // Add icon based on message type
+    let icon = '';
+    if (type === 'success') icon = '<i class="fas fa-check-circle"></i>';
+    else if (type === 'warning') icon = '<i class="fas fa-exclamation-triangle"></i>';
+    else if (type === 'error') icon = '<i class="fas fa-times-circle"></i>';
+    
+    msgEl.innerHTML = `${text} ${icon}`;
+    
+    // Auto hide after 5 seconds (except success)
+    if (type !== 'success') {
+      setTimeout(() => {
+        msgEl.classList.remove('show');
+      }, 5000);
+    }
+  }
+
+  // 🔹 Get IP Address
+  async function getIP() {
+    try {
+      const res = await fetch('https://api.ipify.org?format=json');
+      const data = await res.json();
+      return data.ip;
+    } catch (error) {
+      console.error('Error getting IP:', error);
+      return 'unknown';
+    }
+  }
+
+  // 🔹 Validate Inputs
+  function validateInputs(roblox, whatsapp) {
+    if (!roblox || !whatsapp) {
+      showMessage('❌ برجاء ملء جميع البيانات', 'error');
+      return false;
+    }
+    
+    if (roblox.length < 3 || roblox.length > 20) {
+      showMessage('❌ اسم Roblox يجب أن يكون بين 3 و 20 حرف', 'error');
+      return false;
+    }
+    
+    const whatsappRegex = /^01[0-9]{9}$/;
+    if (!whatsappRegex.test(whatsapp)) {
+      showMessage('❌ رقم واتساب غير صحيح. يجب أن يبدأ بـ 01 ويحتوي على 11 رقم', 'error');
+      return false;
+    }
+    
+    return true;
+  }
+
+  // 🔹 Initialize Page
+  document.addEventListener('DOMContentLoaded', () => {
+    // Create background particles
+    createParticles();
+    
+    // Focus on first input
+    robloxInput.focus();
+    
+    // Counter animation on load
+    setTimeout(() => {
+      countEl.style.transition = 'all 0.5s ease';
+    }, 1000);
   });
 
-  btn.onclick = async ()=>{
-    const roblox = document.getElementById('roblox').value.trim();
-    const whatsapp = document.getElementById('whatsapp').value.trim();
-    if(!roblox || !whatsapp){
-      msg.textContent='❌ برجاء ملء جميع البيانات';
-      msg.style.color='red';return;
+  // 🔹 Real-time Counter Update
+  db.ref('wheel_users').on('value', snap => {
+    const count = snap.exists() ? snap.numChildren() : 0;
+    animateCounter(countEl, count);
+  });
+
+  // 🔹 Register Button Click
+  btn.onclick = async () => {
+    const roblox = robloxInput.value.trim();
+    const whatsapp = whatsappInput.value.trim();
+    
+    if (!validateInputs(roblox, whatsapp)) return;
+    
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin btn-icon"></i> جاري التسجيل...';
+    
+    try {
+      const ip = await getIP();
+      
+      // Check if IP already registered
+      const ipRef = db.ref('ips/' + ip.replace(/\./g, '_'));
+      const ipSnap = await ipRef.get();
+      
+      if (ipSnap.exists()) {
+        showMessage('⚠️ تم التسجيل من هذا الجهاز من قبل', 'warning');
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-paper-plane btn-icon"></i> التسجيل في العجلة';
+        return;
+      }
+      
+      // Save user data
+      const userRef = db.ref('wheel_users').push();
+      await userRef.set({
+        roblox,
+        whatsapp,
+        ip,
+        time: Date.now(),
+        timestamp: new Date().toLocaleString('ar-EG')
+      });
+      
+      // Mark IP as used
+      await ipRef.set(true);
+      
+      // Success
+      showMessage('✅ تم تسجيلك بنجاح في عجلة الحظ! سيتم الاتصال بك عبر الواتساب إذا فزت', 'success');
+      
+      // Reset form
+      robloxInput.value = '';
+      whatsappInput.value = '';
+      
+      // Add celebration effect
+      document.querySelector('.title-icon').style.animation = 'pulse 0.5s 3';
+      
+      // Keep button disabled with success message
+      btn.innerHTML = '<i class="fas fa-check btn-icon"></i> تم التسجيل بنجاح!';
+      
+    } catch (error) {
+      console.error('Registration error:', error);
+      showMessage('❌ حدث خطأ أثناء التسجيل. يرجى المحاولة مرة أخرى', 'error');
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-paper-plane btn-icon"></i> التسجيل في العجلة';
     }
+  };
 
-    btn.disabled=true;
-    const ip = await getIP();
-
-    const ipRef = db.ref('ips/'+ip.replace(/\./g,'_'));
-    const snap = await ipRef.get();
-    if(snap.exists()){
-      msg.textContent='⚠️ تم التسجيل من هذا الجهاز من قبل';
-      msg.style.color='orange';btn.disabled=false;return;
+  // 🔹 Enter Key Support
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      btn.click();
     }
-
-    const userRef = db.ref('wheel_users').push();
-    await userRef.set({
-      roblox,whatsapp,ip,time:Date.now()
-    });
-
-    await ipRef.set(true);
-
-    msg.textContent='✅ تم تسجيلك بنجاح';
-    msg.style.color='lightgreen';
-  }
+  });
 </script>
-
 </body>
 </html>
