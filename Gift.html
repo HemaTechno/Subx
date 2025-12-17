@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <title>التسجيل في عجلة الحظ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+  <style>
+    *{font-family:'Cairo',sans-serif;box-sizing:border-box}
+    body{
+      margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
+      background:radial-gradient(circle at top,#111,#000);
+      color:#fff
+    }
+    .card{
+      width:100%;max-width:420px;
+      background:rgba(20,20,20,.85);
+      border:1px solid #ff2b2b;
+      border-radius:16px;
+      padding:22px;
+      box-shadow:0 0 25px rgba(255,43,43,.25)
+    }
+    h1{text-align:center;margin:5px 0 10px;font-size:22px}
+    .count{text-align:center;color:#ff6b6b;margin-bottom:20px}
+    label{display:block;margin:12px 0 6px;font-size:14px}
+    input{
+      width:100%;padding:12px;border-radius:10px;
+      border:1px solid #333;background:#0e0e0e;color:#fff
+    }
+    input:focus{outline:none;border-color:#ff2b2b}
+    button{
+      width:100%;margin-top:18px;padding:13px;
+      border:none;border-radius:12px;
+      background:linear-gradient(135deg,#ff2b2b,#ff5c5c);
+      color:#fff;font-size:16px;font-weight:700;cursor:pointer
+    }
+    button:disabled{opacity:.6;cursor:not-allowed}
+    .msg{text-align:center;margin-top:15px;font-size:14px}
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h1>🎡 التسجيل في عجلة الحظ</h1>
+    <div class="count">عدد المشتركين: <span id="count">0</span></div>
+
+    <label>اسم Roblox</label>
+    <input id="roblox" placeholder="اكتب اسمك في Roblox">
+
+    <label>رقم واتساب</label>
+    <input id="whatsapp" placeholder="01xxxxxxxxx">
+
+    <button id="register">التسجيل في العجلة</button>
+    <div class="msg" id="msg"></div>
+  </div>
+
+<script>
+  // 🔹 Firebase Config (غير القيم)
+  const firebaseConfig = {
+  apiKey: "AIzaSyBoPJbx5v6EkOqxOJkbhzHqIJdAByh79Rg",
+  authDomain: "hhhhhh-d4fb8.firebaseapp.com",
+  databaseURL: "https://hhhhhh-d4fb8-default-rtdb.firebaseio.com",
+  projectId: "hhhhhh-d4fb8",
+  storageBucket: "hhhhhh-d4fb8.appspot.com",
+  messagingSenderId: "24512338206",
+  appId: "1:24512338206:web:dfe045db59bd3434a2110f",
+  measurementId: "G-HD4R7GNQ5H"
+};
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+
+  const countEl = document.getElementById('count');
+  const msg = document.getElementById('msg');
+  const btn = document.getElementById('register');
+
+  // 🔹 جلب IP
+  async function getIP(){
+    const res = await fetch('https://api.ipify.org?format=json');
+    const data = await res.json();
+    return data.ip;
+  }
+
+  // 🔹 عداد المشتركين
+  db.ref('wheel_users').on('value',snap=>{
+    countEl.textContent = snap.exists()?snap.numChildren():0;
+  });
+
+  btn.onclick = async ()=>{
+    const roblox = document.getElementById('roblox').value.trim();
+    const whatsapp = document.getElementById('whatsapp').value.trim();
+    if(!roblox || !whatsapp){
+      msg.textContent='❌ برجاء ملء جميع البيانات';
+      msg.style.color='red';return;
+    }
+
+    btn.disabled=true;
+    const ip = await getIP();
+
+    const ipRef = db.ref('ips/'+ip.replace(/\./g,'_'));
+    const snap = await ipRef.get();
+    if(snap.exists()){
+      msg.textContent='⚠️ تم التسجيل من هذا الجهاز من قبل';
+      msg.style.color='orange';btn.disabled=false;return;
+    }
+
+    const userRef = db.ref('wheel_users').push();
+    await userRef.set({
+      roblox,whatsapp,ip,time:Date.now()
+    });
+
+    await ipRef.set(true);
+
+    msg.textContent='✅ تم تسجيلك بنجاح';
+    msg.style.color='lightgreen';
+  }
+</script>
+
+</body>
+</html>
