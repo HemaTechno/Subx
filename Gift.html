@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>التسجيل في عجلة الحظ</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
   
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -32,6 +32,12 @@
       --gold: #ffd700;
       --silver: #c0c0c0;
       --bronze: #cd7f32;
+      
+      /* Responsive Breakpoints */
+      --mobile: 480px;
+      --tablet: 768px;
+      --desktop: 1024px;
+      --large-desktop: 1200px;
     }
     
     * {
@@ -41,16 +47,29 @@
       font-family: 'Cairo', sans-serif;
     }
     
+    html {
+      font-size: 16px;
+      -webkit-text-size-adjust: 100%;
+    }
+    
     body {
       min-height: 100vh;
+      min-height: -webkit-fill-available;
       display: flex;
       align-items: center;
       justify-content: center;
       background: radial-gradient(ellipse at top, var(--darker) 0%, var(--dark) 70%);
       color: var(--light);
       overflow-x: hidden;
-      padding: 20px;
+      padding: 16px;
       position: relative;
+    }
+    
+    /* Improved Mobile Support */
+    @supports (-webkit-touch-callout: none) {
+      body {
+        min-height: -webkit-fill-available;
+      }
     }
     
     /* Animated Background Elements */
@@ -63,8 +82,8 @@
     
     .wheel-bg {
       position: absolute;
-      width: 300px;
-      height: 300px;
+      width: min(300px, 80vw);
+      height: min(300px, 80vw);
       border-radius: 50%;
       border: 2px dashed rgba(255, 43, 43, 0.2);
       z-index: -1;
@@ -72,8 +91,8 @@
     }
     
     .wheel-bg:nth-child(2) {
-      width: 500px;
-      height: 500px;
+      width: min(500px, 90vw);
+      height: min(500px, 90vw);
       border-color: rgba(0, 201, 255, 0.15);
       animation-duration: 180s;
     }
@@ -83,14 +102,15 @@
       to { transform: rotate(360deg); }
     }
     
-    /* Card Styles */
+    /* Card Styles - Fully Responsive */
     .card {
       width: 100%;
-      max-width: 480px;
-      background: rgba(15, 15, 15, 0.9);
+      max-width: 500px;
+      min-width: 280px;
+      background: rgba(15, 15, 15, 0.95);
       border: 2px solid var(--primary);
-      border-radius: 24px;
-      padding: 30px;
+      border-radius: 20px;
+      padding: clamp(20px, 5vw, 30px);
       box-shadow: 
         0 10px 40px rgba(255, 43, 43, 0.25),
         0 0 80px rgba(0, 201, 255, 0.15),
@@ -100,6 +120,39 @@
       overflow: hidden;
       z-index: 1;
       animation: fadeIn 0.8s ease-out;
+    }
+    
+    /* Responsive Card Sizes */
+    @media (max-width: 480px) {
+      .card {
+        border-radius: 18px;
+        padding: 18px;
+        max-width: 100%;
+      }
+    }
+    
+    @media (min-width: 481px) and (max-width: 767px) {
+      .card {
+        max-width: 450px;
+      }
+    }
+    
+    @media (min-width: 768px) and (max-width: 1023px) {
+      .card {
+        max-width: 480px;
+      }
+    }
+    
+    @media (min-width: 1024px) {
+      .card {
+        max-width: 500px;
+      }
+    }
+    
+    @media (min-width: 1200px) {
+      .card {
+        max-width: 520px;
+      }
     }
     
     .card::before {
@@ -121,15 +174,15 @@
     /* Header Styles */
     .header {
       text-align: center;
-      margin-bottom: 25px;
+      margin-bottom: clamp(20px, 4vw, 25px);
       position: relative;
     }
     
     .title-icon {
       display: inline-block;
-      font-size: 42px;
+      font-size: clamp(36px, 8vw, 42px);
       color: var(--gold);
-      margin-bottom: 10px;
+      margin-bottom: clamp(8px, 2vw, 10px);
       animation: pulse 2s infinite alternate;
     }
     
@@ -139,28 +192,30 @@
     }
     
     h1 {
-      font-size: 28px;
+      font-size: clamp(22px, 5vw, 28px);
       font-weight: 800;
-      margin: 0 0 5px 0;
+      margin: 0 0 clamp(4px, 1vw, 5px) 0;
       background: linear-gradient(90deg, var(--primary), var(--secondary));
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
       text-shadow: 0 2px 10px rgba(255, 43, 43, 0.3);
+      line-height: 1.3;
     }
     
     .subtitle {
-      font-size: 16px;
+      font-size: clamp(14px, 3.5vw, 16px);
       color: #aaa;
-      margin-bottom: 10px;
+      margin-bottom: clamp(8px, 2vw, 10px);
+      line-height: 1.4;
     }
     
     /* Counter Styles */
     .counter-container {
-      background: rgba(10, 10, 10, 0.8);
-      border-radius: 16px;
-      padding: 15px;
-      margin-bottom: 30px;
+      background: rgba(10, 10, 10, 0.9);
+      border-radius: clamp(14px, 3vw, 16px);
+      padding: clamp(12px, 3vw, 15px);
+      margin-bottom: clamp(24px, 5vw, 30px);
       text-align: center;
       border: 1px solid var(--gray-light);
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
@@ -179,50 +234,54 @@
     }
     
     .counter-label {
-      font-size: 16px;
+      font-size: clamp(14px, 3.5vw, 16px);
       font-weight: 600;
       color: #aaa;
-      margin-bottom: 8px;
+      margin-bottom: clamp(6px, 1.5vw, 8px);
     }
     
     .counter-value {
-      font-size: 42px;
+      font-size: clamp(32px, 8vw, 42px);
       font-weight: 800;
       color: var(--gold);
       text-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
       transition: all 0.3s ease;
+      line-height: 1.2;
+      word-break: break-word;
+      overflow-wrap: break-word;
     }
     
     .counter-badge {
       display: inline-block;
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       color: white;
-      font-size: 14px;
-      padding: 5px 12px;
+      font-size: clamp(12px, 3vw, 14px);
+      padding: clamp(4px, 1vw, 5px) clamp(10px, 2.5vw, 12px);
       border-radius: 20px;
-      margin-top: 10px;
+      margin-top: clamp(8px, 2vw, 10px);
       font-weight: 600;
       box-shadow: 0 4px 8px rgba(255, 43, 43, 0.3);
     }
     
     /* Form Styles */
     .form-group {
-      margin-bottom: 22px;
+      margin-bottom: clamp(18px, 4vw, 22px);
       position: relative;
     }
     
     label {
       display: block;
-      margin-bottom: 8px;
-      font-size: 16px;
+      margin-bottom: clamp(6px, 1.5vw, 8px);
+      font-size: clamp(14px, 3.5vw, 16px);
       font-weight: 600;
       color: #ddd;
       padding-right: 10px;
     }
     
     label i {
-      margin-left: 8px;
+      margin-left: clamp(6px, 1.5vw, 8px);
       color: var(--primary-light);
+      font-size: clamp(14px, 3.5vw, 16px);
     }
     
     .input-container {
@@ -231,53 +290,66 @@
     
     input {
       width: 100%;
-      padding: 16px 20px 16px 50px;
-      border-radius: 14px;
+      padding: clamp(14px, 3.5vw, 16px) clamp(18px, 4vw, 20px) clamp(14px, 3.5vw, 16px) 50px;
+      border-radius: clamp(12px, 3vw, 14px);
       border: 2px solid var(--gray);
-      background: rgba(10, 10, 10, 0.8);
+      background: rgba(10, 10, 10, 0.9);
       color: var(--light);
-      font-size: 16px;
+      font-size: clamp(14px, 3.5vw, 16px);
       transition: all 0.3s ease;
       direction: ltr;
+      min-height: 50px;
     }
     
     input:focus {
       outline: none;
       border-color: var(--primary);
       box-shadow: 0 0 0 3px rgba(255, 43, 43, 0.2);
-      background: rgba(20, 20, 20, 0.9);
+      background: rgba(20, 20, 20, 0.95);
+    }
+    
+    /* Prevent zoom on iOS input focus */
+    @media (max-width: 480px) {
+      input {
+        font-size: 16px; /* Prevents iOS zoom */
+      }
     }
     
     .input-icon {
       position: absolute;
-      left: 18px;
+      left: clamp(15px, 3.5vw, 18px);
       top: 50%;
       transform: translateY(-50%);
       color: var(--primary);
-      font-size: 18px;
+      font-size: clamp(16px, 4vw, 18px);
       z-index: 2;
     }
     
     /* Button Styles */
     .btn-container {
-      margin-top: 30px;
+      margin-top: clamp(24px, 5vw, 30px);
       position: relative;
     }
     
     button {
       width: 100%;
-      padding: 18px;
+      padding: clamp(16px, 4vw, 18px);
       border: none;
-      border-radius: 16px;
+      border-radius: clamp(14px, 3.5vw, 16px);
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       color: var(--light);
-      font-size: 18px;
+      font-size: clamp(16px, 4vw, 18px);
       font-weight: 700;
       cursor: pointer;
       transition: all 0.3s ease;
       position: relative;
       overflow: hidden;
       box-shadow: 0 8px 20px rgba(255, 43, 43, 0.4);
+      min-height: 55px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
     }
     
     button:hover:not(:disabled) {
@@ -292,10 +364,6 @@
     button:disabled {
       opacity: 0.6;
       cursor: not-allowed;
-    }
-    
-    .btn-icon {
-      margin-left: 10px;
     }
     
     .btn-glow {
@@ -315,10 +383,10 @@
     /* Message Styles */
     .message {
       text-align: center;
-      margin-top: 20px;
-      padding: 15px;
-      border-radius: 12px;
-      font-size: 16px;
+      margin-top: clamp(16px, 4vw, 20px);
+      padding: clamp(12px, 3vw, 15px);
+      border-radius: clamp(10px, 2.5vw, 12px);
+      font-size: clamp(14px, 3.5vw, 16px);
       font-weight: 600;
       opacity: 0;
       transform: translateY(10px);
@@ -326,11 +394,14 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      min-height: 60px;
     }
     
     .message i {
-      margin-left: 10px;
-      font-size: 20px;
+      font-size: clamp(18px, 4.5vw, 20px);
+      flex-shrink: 0;
     }
     
     .message.show {
@@ -359,30 +430,113 @@
     /* Footer */
     .footer {
       text-align: center;
-      margin-top: 25px;
-      font-size: 14px;
+      margin-top: clamp(20px, 4vw, 25px);
+      font-size: clamp(12px, 3vw, 14px);
       color: #777;
-      padding-top: 15px;
+      padding-top: clamp(12px, 3vw, 15px);
       border-top: 1px solid rgba(255, 255, 255, 0.05);
+      line-height: 1.5;
     }
     
-    /* Responsive */
-    @media (max-width: 600px) {
+    /* Landscape Orientation Support */
+    @media (orientation: landscape) and (max-height: 600px) {
+      body {
+        padding: 10px;
+        align-items: flex-start;
+      }
+      
       .card {
-        padding: 25px 20px;
-        max-width: 95%;
+        margin-top: 10px;
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+      
+      .form-group {
+        margin-bottom: 12px;
+      }
+      
+      .counter-container {
+        margin-bottom: 15px;
+        padding: 10px;
+      }
+      
+      .btn-container {
+        margin-top: 15px;
+      }
+      
+      input {
+        padding: 10px 15px 10px 40px;
+        min-height: 45px;
+      }
+      
+      button {
+        padding: 12px;
+        min-height: 45px;
+      }
+    }
+    
+    /* Extra Small Phones */
+    @media (max-width: 360px) {
+      .card {
+        padding: 15px;
+        border-radius: 16px;
       }
       
       h1 {
-        font-size: 24px;
+        font-size: 20px;
       }
       
       .counter-value {
-        font-size: 36px;
+        font-size: 28px;
       }
       
-      input, button {
-        padding: 14px 14px 14px 50px;
+      input {
+        font-size: 14px;
+        padding-left: 40px;
+      }
+      
+      .input-icon {
+        left: 12px;
+      }
+    }
+    
+    /* Tablet Landscape */
+    @media (min-width: 768px) and (max-width: 1023px) and (orientation: landscape) {
+      .card {
+        max-width: 90%;
+        margin: 20px auto;
+      }
+    }
+    
+    /* Prevent text size adjustment on orientation change */
+    @media (orientation: portrait) {
+      html {
+        -webkit-text-size-adjust: 100%;
+      }
+    }
+    
+    /* High Resolution Screens */
+    @media (min-resolution: 192dpi) {
+      .card {
+        border-width: 1.5px;
+      }
+    }
+    
+    /* Print Styles */
+    @media print {
+      body {
+        background: white;
+        color: black;
+      }
+      
+      .card {
+        border: 1px solid #ccc;
+        box-shadow: none;
+        background: white;
+      }
+      
+      button, .counter-badge, .wheel-bg, .bg-particle {
+        display: none !important;
       }
     }
   </style>
@@ -427,7 +581,8 @@
     <div class="btn-container">
       <button id="register">
         <span class="btn-glow"></span>
-        <i class="fas fa-paper-plane btn-icon"></i> التسجيل في العجلة
+        <i class="fas fa-paper-plane"></i> 
+        <span>التسجيل في العجلة</span>
       </button>
     </div>
     
@@ -463,16 +618,39 @@
   const robloxInput = document.getElementById('roblox');
   const whatsappInput = document.getElementById('whatsapp');
 
+  // 🔹 Responsive Helper Functions
+  function adjustForScreenSize() {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    const isMobile = width <= 480;
+    const isTablet = width > 480 && width <= 768;
+    const isLandscape = width > height;
+    
+    // Adjust body padding based on screen size
+    if (isMobile && isLandscape) {
+      document.body.style.padding = '5px';
+    } else if (isMobile) {
+      document.body.style.padding = '12px';
+    } else if (isTablet) {
+      document.body.style.padding = '20px';
+    } else {
+      document.body.style.padding = '20px';
+    }
+  }
+
   // 🔹 Create Background Particles
   function createParticles() {
     const particlesContainer = document.body;
-    const particleCount = 20;
+    const particleCount = window.innerWidth < 768 ? 15 : 25;
     
     for (let i = 0; i < particleCount; i++) {
       const particle = document.createElement('div');
       particle.classList.add('bg-particle');
       
-      const size = Math.random() * 10 + 5;
+      const size = window.innerWidth < 768 ? 
+        Math.random() * 8 + 3 : 
+        Math.random() * 10 + 5;
+      
       particle.style.width = `${size}px`;
       particle.style.height = `${size}px`;
       
@@ -480,10 +658,10 @@
       particle.style.top = `${Math.random() * 100}vh`;
       
       particle.style.background = i % 3 === 0 
-        ? 'rgba(255, 43, 43, 0.2)' 
+        ? 'rgba(255, 43, 43, 0.15)' 
         : i % 3 === 1 
-          ? 'rgba(0, 201, 255, 0.2)' 
-          : 'rgba(255, 215, 0, 0.2)';
+          ? 'rgba(0, 201, 255, 0.15)' 
+          : 'rgba(255, 215, 0, 0.15)';
       
       particlesContainer.appendChild(particle);
       
@@ -495,8 +673,8 @@
   function animateParticle(particle) {
     let x = parseFloat(particle.style.left);
     let y = parseFloat(particle.style.top);
-    let xSpeed = (Math.random() - 0.5) * 0.5;
-    let ySpeed = (Math.random() - 0.5) * 0.5;
+    let xSpeed = (Math.random() - 0.5) * (window.innerWidth < 768 ? 0.3 : 0.5);
+    let ySpeed = (Math.random() - 0.5) * (window.innerWidth < 768 ? 0.3 : 0.5);
     
     function move() {
       x += xSpeed;
@@ -516,8 +694,8 @@
 
   // 🔹 Animate Counter
   function animateCounter(element, targetValue) {
-    const currentValue = parseInt(element.textContent);
-    const duration = 800; // ms
+    const currentValue = parseInt(element.textContent.replace(/,/g, '')) || 0;
+    const duration = 800;
     const steps = 20;
     const stepValue = (targetValue - currentValue) / steps;
     let currentStep = 0;
@@ -545,15 +723,13 @@
     msgEl.textContent = text;
     msgEl.className = `message show ${type}`;
     
-    // Add icon based on message type
     let icon = '';
     if (type === 'success') icon = '<i class="fas fa-check-circle"></i>';
     else if (type === 'warning') icon = '<i class="fas fa-exclamation-triangle"></i>';
     else if (type === 'error') icon = '<i class="fas fa-times-circle"></i>';
     
-    msgEl.innerHTML = `${text} ${icon}`;
+    msgEl.innerHTML = `${icon} <span>${text}</span>`;
     
-    // Auto hide after 5 seconds (except success)
     if (type !== 'success') {
       setTimeout(() => {
         msgEl.classList.remove('show');
@@ -576,18 +752,18 @@
   // 🔹 Validate Inputs
   function validateInputs(roblox, whatsapp) {
     if (!roblox || !whatsapp) {
-      showMessage('❌ برجاء ملء جميع البيانات', 'error');
+      showMessage('برجاء ملء جميع البيانات', 'error');
       return false;
     }
     
     if (roblox.length < 3 || roblox.length > 20) {
-      showMessage('❌ اسم Roblox يجب أن يكون بين 3 و 20 حرف', 'error');
+      showMessage('اسم Roblox يجب أن يكون بين 3 و 20 حرف', 'error');
       return false;
     }
     
     const whatsappRegex = /^01[0-9]{9}$/;
     if (!whatsappRegex.test(whatsapp)) {
-      showMessage('❌ رقم واتساب غير صحيح. يجب أن يبدأ بـ 01 ويحتوي على 11 رقم', 'error');
+      showMessage('رقم واتساب غير صحيح. يجب أن يبدأ بـ 01 ويحتوي على 11 رقم', 'error');
       return false;
     }
     
@@ -596,16 +772,34 @@
 
   // 🔹 Initialize Page
   document.addEventListener('DOMContentLoaded', () => {
+    // Adjust for initial screen size
+    adjustForScreenSize();
+    
     // Create background particles
     createParticles();
     
     // Focus on first input
     robloxInput.focus();
     
-    // Counter animation on load
-    setTimeout(() => {
-      countEl.style.transition = 'all 0.5s ease';
-    }, 1000);
+    // Adjust input font size for mobile to prevent zoom
+    if (window.innerWidth <= 480) {
+      robloxInput.style.fontSize = '16px';
+      whatsappInput.style.fontSize = '16px';
+    }
+  });
+
+  // 🔹 Handle Window Resize
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      adjustForScreenSize();
+    }, 250);
+  });
+
+  // 🔹 Handle Orientation Change
+  window.addEventListener('orientationchange', () => {
+    setTimeout(adjustForScreenSize, 100);
   });
 
   // 🔹 Real-time Counter Update
@@ -622,7 +816,7 @@
     if (!validateInputs(roblox, whatsapp)) return;
     
     btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin btn-icon"></i> جاري التسجيل...';
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>جاري التسجيل...</span>';
     
     try {
       const ip = await getIP();
@@ -632,9 +826,9 @@
       const ipSnap = await ipRef.get();
       
       if (ipSnap.exists()) {
-        showMessage('⚠️ تم التسجيل من هذا الجهاز من قبل', 'warning');
+        showMessage('تم التسجيل من هذا الجهاز من قبل', 'warning');
         btn.disabled = false;
-        btn.innerHTML = '<i class="fas fa-paper-plane btn-icon"></i> التسجيل في العجلة';
+        btn.innerHTML = '<i class="fas fa-paper-plane"></i><span>التسجيل في العجلة</span>';
         return;
       }
       
@@ -652,23 +846,27 @@
       await ipRef.set(true);
       
       // Success
-      showMessage('✅ تم تسجيلك بنجاح في عجلة الحظ! سيتم الاتصال بك عبر الواتساب إذا فزت', 'success');
+      showMessage('تم تسجيلك بنجاح في عجلة الحظ! سيتم الاتصال بك عبر الواتساب إذا فزت', 'success');
       
       // Reset form
       robloxInput.value = '';
       whatsappInput.value = '';
       
       // Add celebration effect
-      document.querySelector('.title-icon').style.animation = 'pulse 0.5s 3';
+      const titleIcon = document.querySelector('.title-icon');
+      titleIcon.style.animation = 'none';
+      setTimeout(() => {
+        titleIcon.style.animation = 'pulse 0.5s 3';
+      }, 10);
       
       // Keep button disabled with success message
-      btn.innerHTML = '<i class="fas fa-check btn-icon"></i> تم التسجيل بنجاح!';
+      btn.innerHTML = '<i class="fas fa-check"></i><span>تم التسجيل بنجاح!</span>';
       
     } catch (error) {
       console.error('Registration error:', error);
-      showMessage('❌ حدث خطأ أثناء التسجيل. يرجى المحاولة مرة أخرى', 'error');
+      showMessage('حدث خطأ أثناء التسجيل. يرجى المحاولة مرة أخرى', 'error');
       btn.disabled = false;
-      btn.innerHTML = '<i class="fas fa-paper-plane btn-icon"></i> التسجيل في العجلة';
+      btn.innerHTML = '<i class="fas fa-paper-plane"></i><span>التسجيل في العجلة</span>';
     }
   };
 
@@ -678,6 +876,9 @@
       btn.click();
     }
   });
+
+  // 🔹 Touch Device Improvements
+  document.addEventListener('touchstart', () => {}, {passive: true});
 </script>
 </body>
 </html>
