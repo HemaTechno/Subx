@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>اختيار فائز</title>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+<style>
+body{background:#000;color:#fff;font-family:cairo;display:flex;justify-content:center;align-items:center;height:100vh}
+.box{border:2px solid red;padding:30px;border-radius:15px;text-align:center;width:350px}
+.display{height:70px;border:1px dashed red;margin:15px 0;display:flex;align-items:center;justify-content:center}
+button{padding:12px 25px;background:red;color:#fff;border:none;border-radius:10px;font-size:16px}
+</style>
+</head>
+<body>
+
+<div class="box">
+  <h2>🎡 اختيار الفائز</h2>
+  <div class="display" id="roll">---</div>
+  <button onclick="pickWinner()">اختيار فائز</button>
+</div>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyBoPJbx5v6EkOqxOJkbhzHqIJdAByh79Rg",
+  authDomain: "hhhhhh-d4fb8.firebaseapp.com",
+  databaseURL: "https://hhhhhh-d4fb8-default-rtdb.firebaseio.com",
+  projectId: "hhhhhh-d4fb8"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+async function pickWinner(){
+  const snap = await db.ref("wheel_users").get();
+  if(!snap.exists()) return alert("لا يوجد مشتركين");
+
+  const users=[];
+  snap.forEach(c=>users.push({id:c.key,...c.val()}));
+
+  let i=0;
+  const roll=setInterval(()=>{
+    document.getElementById("roll").textContent=users[i%users.length].roblox;
+    i++;
+  },80);
+
+  setTimeout(async ()=>{
+    clearInterval(roll);
+    const winner=users[Math.floor(Math.random()*users.length)];
+    document.getElementById("roll").textContent=winner.roblox;
+
+    // حذف المشترك
+    await db.ref("wheel_users/"+winner.id).remove();
+
+    // حذف IP
+    if(winner.ip){
+      await db.ref("ips/"+winner.ip.replace(/\./g,'_')).remove();
+    }
+
+    // تسجيل الفائز (هنا الرسالة هتتبعت)
+    await db.ref("winners").push({
+      roblox:winner.roblox,
+      whatsapp:winner.whatsapp,
+      time:Date.now()
+    });
+
+  },3000);
+}
+</script>
+</body>
+</html>
