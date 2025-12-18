@@ -71,6 +71,17 @@ body {
   margin: 0 auto;
 }
 
+.timer-display {
+  font-size: 1.2rem;
+  color: var(--accent);
+  margin-top: 10px;
+  font-weight: 600;
+  background: rgba(255, 211, 42, 0.1);
+  padding: 8px 20px;
+  border-radius: 30px;
+  border: 1px solid rgba(255, 211, 42, 0.3);
+}
+
 .content {
   display: flex;
   flex-wrap: wrap;
@@ -195,6 +206,12 @@ body {
   color: var(--primary);
 }
 
+.display.slow-spinning {
+  border: 2px solid var(--secondary);
+  box-shadow: 0 0 25px rgba(55, 66, 250, 0.5);
+  color: var(--secondary);
+}
+
 button {
   padding: 18px 35px;
   background: linear-gradient(to right, var(--primary), var(--primary-dark));
@@ -285,6 +302,118 @@ button:focus:not(:active)::after {
   font-weight: 600;
 }
 
+/* تصميم زر إظهار/إخفاء الواتساب */
+.whatsapp-toggle {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 8px 15px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 0.9rem;
+  color: #aaa;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 10px;
+}
+
+.whatsapp-toggle:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.whatsapp-toggle.active {
+  background: rgba(37, 211, 102, 0.2);
+  border-color: rgba(37, 211, 102, 0.5);
+  color: #25d366;
+}
+
+.whatsapp-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.whatsapp-number {
+  direction: ltr;
+  text-align: left;
+  flex: 1;
+}
+
+.hidden-number {
+  color: #666;
+  letter-spacing: 2px;
+  font-weight: 400;
+}
+
+/* تصميم نافذة تأكيد العرض */
+.confirm-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+}
+
+.modal-content {
+  background: linear-gradient(145deg, rgba(26, 26, 26, 0.95), rgba(10, 10, 10, 0.95));
+  border-radius: 20px;
+  padding: 30px;
+  max-width: 400px;
+  width: 90%;
+  border: 2px solid rgba(255, 71, 87, 0.5);
+  text-align: center;
+}
+
+.modal-content h3 {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  color: var(--accent);
+}
+
+.modal-content p {
+  color: #ccc;
+  margin-bottom: 25px;
+  line-height: 1.5;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.modal-btn {
+  padding: 12px 25px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  flex: 1;
+}
+
+.modal-btn.confirm {
+  background: linear-gradient(to right, #25d366, #1da851);
+  color: white;
+}
+
+.modal-btn.cancel {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ccc;
+}
+
+.modal-btn:hover {
+  transform: translateY(-2px);
+}
+
 .particles {
   position: fixed;
   top: 0;
@@ -300,6 +429,13 @@ button:focus:not(:active)::after {
   width: 10px;
   height: 20px;
   opacity: 0;
+}
+
+.stage-indicator {
+  margin-top: 15px;
+  font-size: 1rem;
+  color: #aaa;
+  height: 24px;
 }
 
 @keyframes pulse {
@@ -356,6 +492,7 @@ button:focus:not(:active)::after {
   <div class="header">
     <h1>🎡 عجلة الفائزين 🏆</h1>
     <p>اختيار عشوائي محايد وشفاف للمشتركين مع عرض احتفالي للفائز</p>
+    <div class="timer-display" id="timerDisplay">الوقت المتبقي: 00:30</div>
   </div>
   
   <div class="content">
@@ -368,9 +505,10 @@ button:focus:not(:active)::after {
       <div class="selection-box">
         <h2>👑 اختيار الفائز</h2>
         <div class="display" id="roll">---</div>
-        <button id="pickWinnerBtn" onclick="pickWinner()">بدء الاختيار 🎯</button>
+        <div class="stage-indicator" id="stageIndicator">جاهز للبدء</div>
+        <button id="pickWinnerBtn" onclick="startSelection()">بدء الاختيار 🎯</button>
         <div style="margin-top: 20px; color: #aaa; font-size: 0.9rem;">
-          <p>سيتم اختيار الفائز عشوائياً من قاعدة البيانات</p>
+          <p>مدة الاختيار: 30 ثانية - سيتم اختيار الفائز عشوائياً من قاعدة البيانات</p>
           <p id="participantCount">جاري تحميل عدد المشتركين...</p>
         </div>
       </div>
@@ -383,13 +521,31 @@ button:focus:not(:active)::after {
         </div>
         <div class="info-row">
           <span class="info-label">رقم الواتساب:</span>
-          <span class="info-value" id="winnerWhatsapp">---</span>
+          <div class="whatsapp-container">
+            <span class="info-value whatsapp-number hidden-number" id="hiddenWhatsapp">••••••••••</span>
+            <button class="whatsapp-toggle" onclick="toggleWhatsapp()" id="whatsappToggle">
+              <span>👁️ إظهار</span>
+            </button>
+          </div>
         </div>
         <div class="info-row">
           <span class="info-label">وقت الفوز:</span>
           <span class="info-value" id="winTime">---</span>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- نافذة تأكيد إظهار رقم الواتساب -->
+<div class="confirm-modal" id="confirmModal" style="display: none;">
+  <div class="modal-content">
+    <h3>⚠️ تنبيه الخصوصية</h3>
+    <p>رقم الواتساب يعتبر معلومات خاصة. هل أنت متأكد من رغبتك في عرض هذا الرقم؟</p>
+    <p style="font-size: 0.9rem; color: #ff4757;">سيتم تسجيل هذه العملية في السجلات</p>
+    <div class="modal-buttons">
+      <button class="modal-btn confirm" onclick="confirmShowWhatsapp()">نعم، عرض الرقم</button>
+      <button class="modal-btn cancel" onclick="cancelShowWhatsapp()">إلغاء</button>
     </div>
   </div>
 </div>
@@ -407,6 +563,10 @@ const db = firebase.database();
 
 let participants = [];
 let isSpinning = false;
+let selectionTimer = null;
+let timeLeft = 30;
+let currentStage = 0;
+let currentWinner = null;
 
 // إنشاء تأثير الجسيمات
 function createParticles() {
@@ -469,6 +629,18 @@ function formatTime(timestamp) {
   });
 }
 
+// تحديث العداد
+function updateTimer() {
+  const minutes = Math.floor(timeLeft / 60);
+  const seconds = timeLeft % 60;
+  document.getElementById('timerDisplay').textContent = 
+    `الوقت المتبقي: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  
+  if (timeLeft > 0) {
+    timeLeft--;
+  }
+}
+
 // تدوير العجلة
 function spinWheel(duration, finalAngle = 0) {
   const wheel = document.getElementById('wheel');
@@ -476,12 +648,12 @@ function spinWheel(duration, finalAngle = 0) {
   wheel.style.transform = `rotate(${finalAngle}deg)`;
 }
 
-async function pickWinner() {
+// بدء عملية الاختيار
+function startSelection() {
   if (isSpinning) return;
   
   const btn = document.getElementById('pickWinnerBtn');
   const display = document.getElementById('roll');
-  const wheel = document.getElementById('wheel');
   
   // تحقق من وجود مشتركين
   if (participants.length === 0) {
@@ -489,7 +661,10 @@ async function pickWinner() {
     return;
   }
   
+  // إعادة تعيين المتغيرات
   isSpinning = true;
+  timeLeft = 30;
+  currentStage = 1;
   btn.disabled = true;
   btn.textContent = 'جاري الاختيار...';
   display.classList.remove('winner-selected');
@@ -498,93 +673,168 @@ async function pickWinner() {
   // إخفاء معلومات الفائز السابق
   document.getElementById('winnerInfo').style.display = 'none';
   
-  // تدوير العجلة
-  const spins = 5; // عدد الدورات
-  const totalRotation = 360 * spins;
-  spinWheel(3000, totalRotation);
+  // بدء العداد
+  selectionTimer = setInterval(updateTimer, 1000);
+  updateTimer();
   
-  // عرض الأسماء بسرعة
+  // المرحلة 1: العرض السريع (5 ثواني)
+  document.getElementById('stageIndicator').textContent = 'المرحلة 1: العرض السريع';
+  
   let i = 0;
-  const rollInterval = setInterval(() => {
+  const fastInterval = setInterval(() => {
     display.textContent = participants[i % participants.length].roblox;
     i++;
-    
-    // زيادة السرعة تدريجياً
-    if (i > 30) clearInterval(rollInterval);
-  }, 50);
+  }, 80); // أسرع
   
-  // بعد 1.5 ثانية، إبطاء العرض
+  // تدوير العجلة بسرعة
+  const spins = 8;
+  const totalRotation = 360 * spins;
+  spinWheel(5000, totalRotation);
+  
+  // بعد 5 ثواني، الانتقال للمرحلة المتوسطة
   setTimeout(() => {
-    clearInterval(rollInterval);
+    clearInterval(fastInterval);
+    currentStage = 2;
+    document.getElementById('stageIndicator').textContent = 'المرحلة 2: العرض المتوسط';
+    display.classList.remove('spinning');
+    display.classList.add('slow-spinning');
     
     let j = i % participants.length;
-    const slowInterval = setInterval(() => {
+    const mediumInterval = setInterval(() => {
       display.textContent = participants[j % participants.length].roblox;
       j++;
-    }, 150);
+    }, 150); // أبطأ
     
-    // بعد 3 ثوانٍ، اختيار الفائز
-    setTimeout(async () => {
-      clearInterval(slowInterval);
+    // تدوير العجلة بسرعة متوسطة
+    spinWheel(10000, totalRotation + 360 * 4);
+    
+    // بعد 10 ثواني إضافية، الانتقال للمرحلة البطيئة
+    setTimeout(() => {
+      clearInterval(mediumInterval);
+      currentStage = 3;
+      document.getElementById('stageIndicator').textContent = 'المرحلة 3: العرض البطيء - الاستعداد للفائز';
       
-      // اختيار الفائز عشوائياً
-      const winner = participants[Math.floor(Math.random() * participants.length)];
+      let k = j % participants.length;
+      const slowInterval = setInterval(() => {
+        display.textContent = participants[k % participants.length].roblox;
+        k++;
+      }, 300); // أبطأ كثيراً
       
-      // عرض الفائز
-      display.textContent = winner.roblox;
-      display.classList.remove('spinning');
-      display.classList.add('winner-selected');
+      // تدوير العجلة ببطء
+      spinWheel(15000, totalRotation + 360 * 8);
       
-      // تدوير العجلة إلى موضع الفائز
-      const winnerIndex = participants.indexOf(winner);
-      const winnerAngle = 360 - (winnerIndex * (360 / participants.length));
-      const finalAngle = totalRotation + winnerAngle;
-      
-      spinWheel(2000, finalAngle);
-      
-      // عرض معلومات الفائز
-      document.getElementById('winnerName').textContent = winner.roblox;
-      document.getElementById('winnerWhatsapp').textContent = winner.whatsapp || 'غير متوفر';
-      document.getElementById('winTime').textContent = formatTime(Date.now());
-      document.getElementById('winnerInfo').style.display = 'block';
-      
-      // تفعيل تأثير التخرج
-      activateConfetti();
-      
-      // تحديث قاعدة البيانات
-      try {
-        // حذف المشترك من المشاركين
-        await db.ref("wheel_users/" + winner.id).remove();
+      // بعد 15 ثانية إضافية، اختيار الفائز (المجموع 30 ثانية)
+      setTimeout(async () => {
+        clearInterval(slowInterval);
+        clearInterval(selectionTimer);
         
-        // حذف IP الخاص بالمشترك
-        if (winner.ip) {
-          await db.ref("ips/" + winner.ip.replace(/\./g, '_')).remove();
+        // اختيار الفائز عشوائياً
+        const winner = participants[Math.floor(Math.random() * participants.length)];
+        currentWinner = winner;
+        
+        // عرض الفائز
+        display.textContent = winner.roblox;
+        display.classList.remove('slow-spinning');
+        display.classList.add('winner-selected');
+        document.getElementById('stageIndicator').textContent = '🎉 تم اختيار الفائز!';
+        
+        // تدوير العجلة إلى موضع الفائز
+        const winnerIndex = participants.indexOf(winner);
+        const winnerAngle = 360 - (winnerIndex * (360 / participants.length));
+        const finalAngle = totalRotation + 360 * 12 + winnerAngle;
+        
+        spinWheel(2000, finalAngle);
+        
+        // عرض معلومات الفائز
+        document.getElementById('winnerName').textContent = winner.roblox;
+        document.getElementById('hiddenWhatsapp').textContent = '••••••••••';
+        document.getElementById('winTime').textContent = formatTime(Date.now());
+        document.getElementById('winnerInfo').style.display = 'block';
+        
+        // إعادة تعيين زر الواتساب
+        const toggleBtn = document.getElementById('whatsappToggle');
+        toggleBtn.innerHTML = '<span>👁️ إظهار</span>';
+        toggleBtn.classList.remove('active');
+        
+        // تفعيل تأثير التخرج
+        activateConfetti();
+        
+        // تحديث قاعدة البيانات
+        try {
+          // حذف المشترك من المشاركين
+          await db.ref("wheel_users/" + winner.id).remove();
+          
+          // حذف IP الخاص بالمشترك
+          if (winner.ip) {
+            await db.ref("ips/" + winner.ip.replace(/\./g, '_')).remove();
+          }
+          
+          // تسجيل الفائز
+          await db.ref("winners").push({
+            roblox: winner.roblox,
+            whatsapp: winner.whatsapp,
+            time: Date.now()
+          });
+          
+          console.log("الفائز تم تسجيله بنجاح:", winner.roblox);
+        } catch (error) {
+          console.error("حدث خطأ أثناء تحديث قاعدة البيانات:", error);
+          alert("⚠️ تم اختيار الفائز لكن حدث خطأ في التحديث. الرجاء المحاولة لاحقاً.");
         }
         
-        // تسجيل الفائز
-        await db.ref("winners").push({
-          roblox: winner.roblox,
-          whatsapp: winner.whatsapp,
-          time: Date.now()
-        });
+        // تحديث قائمة المشاركين
+        participants = participants.filter(p => p.id !== winner.id);
+        document.getElementById('participantCount').textContent = `عدد المشتركين الحالي: ${participants.length}`;
         
-        console.log("الفائز تم تسجيله بنجاح:", winner.roblox);
-      } catch (error) {
-        console.error("حدث خطأ أثناء تحديث قاعدة البيانات:", error);
-        alert("⚠️ تم اختيار الفائز لكن حدث خطأ في التحديث. الرجاء المحاولة لاحقاً.");
-      }
-      
-      // تحديث قائمة المشاركين
-      participants = participants.filter(p => p.id !== winner.id);
-      document.getElementById('participantCount').textContent = `عدد المشتركين الحالي: ${participants.length}`;
-      
-      // إعادة تعيين الزر
-      btn.disabled = false;
-      btn.textContent = 'بدء الاختيار 🎯';
-      isSpinning = false;
-      
-    }, 1500); // وقت العرض البطيء
-  }, 1500); // وقت العرض السريع
+        // إعادة تعيين الزر
+        btn.disabled = false;
+        btn.textContent = 'بدء الاختيار 🎯';
+        isSpinning = false;
+        
+      }, 15000); // المرحلة البطيئة
+    }, 10000); // المرحلة المتوسطة
+  }, 5000); // المرحلة السريعة
+}
+
+// إظهار/إخفاء رقم الواتساب
+function toggleWhatsapp() {
+  if (!currentWinner || !currentWinner.whatsapp) return;
+  
+  const toggleBtn = document.getElementById('whatsappToggle');
+  const whatsappDisplay = document.getElementById('hiddenWhatsapp');
+  
+  if (toggleBtn.classList.contains('active')) {
+    // إخفاء الرقم
+    whatsappDisplay.textContent = '••••••••••';
+    toggleBtn.innerHTML = '<span>👁️ إظهار</span>';
+    toggleBtn.classList.remove('active');
+  } else {
+    // طلب تأكيد قبل الإظهار
+    document.getElementById('confirmModal').style.display = 'flex';
+  }
+}
+
+// تأكيد إظهار رقم الواتساب
+function confirmShowWhatsapp() {
+  const toggleBtn = document.getElementById('whatsappToggle');
+  const whatsappDisplay = document.getElementById('hiddenWhatsapp');
+  
+  // إظهار الرقم
+  whatsappDisplay.textContent = currentWinner.whatsapp;
+  whatsappDisplay.classList.remove('hidden-number');
+  toggleBtn.innerHTML = '<span>👁️ إخفاء</span>';
+  toggleBtn.classList.add('active');
+  
+  // إغلاق نافذة التأكيد
+  document.getElementById('confirmModal').style.display = 'none';
+  
+  // تسجيل عملية العرض (اختياري)
+  console.log("تم عرض رقم الواتساب للفائز:", currentWinner.roblox);
+}
+
+// إلغاء إظهار رقم الواتساب
+function cancelShowWhatsapp() {
+  document.getElementById('confirmModal').style.display = 'none';
 }
 
 // التهيئة الأولية
@@ -606,4 +856,4 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 </body>
-</html> 
+            </html> 
