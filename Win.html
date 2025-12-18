@@ -1,25 +1,397 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>اختيار فائز</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>اختيار فائز - عجلة الحظ</title>
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
 <style>
-body{background:#000;color:#fff;font-family:cairo;display:flex;justify-content:center;align-items:center;height:100vh}
-.box{border:2px solid red;padding:30px;border-radius:15px;text-align:center;width:350px}
-.display{height:70px;border:1px dashed red;margin:15px 0;display:flex;align-items:center;justify-content:center}
-button{padding:12px 25px;background:red;color:#fff;border:none;border-radius:10px;font-size:16px}
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
+
+:root {
+  --primary: #ff4757;
+  --primary-dark: #ff3838;
+  --secondary: #3742fa;
+  --dark: #0a0a0a;
+  --dark-light: #1a1a1a;
+  --light: #ffffff;
+  --accent: #ffd32a;
+  --success: #2ed573;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: linear-gradient(135deg, #0a0a0a, #1a1a2e);
+  color: var(--light);
+  font-family: 'Cairo', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  overflow-x: hidden;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 900px;
+  gap: 30px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.header h1 {
+  font-size: 2.8rem;
+  background: linear-gradient(to right, var(--primary), var(--accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 10px;
+  text-shadow: 0 0 15px rgba(255, 71, 87, 0.3);
+}
+
+.header p {
+  color: #aaa;
+  font-size: 1.1rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.wheel-container {
+  flex: 1;
+  min-width: 300px;
+  max-width: 400px;
+  position: relative;
+}
+
+.wheel {
+  width: 100%;
+  height: 400px;
+  position: relative;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    #ff3838 0deg 60deg,
+    #3742fa 60deg 120deg,
+    #ffd32a 120deg 180deg,
+    #2ed573 180deg 240deg,
+    #9c88ff 240deg 300deg,
+    #ff9ff3 300deg 360deg
+  );
+  box-shadow: 0 0 40px rgba(255, 71, 87, 0.5),
+              inset 0 0 40px rgba(0, 0, 0, 0.8);
+  transition: transform 0.1s;
+  overflow: hidden;
+  border: 8px solid var(--dark);
+}
+
+.wheel::before {
+  content: '';
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background: var(--primary);
+  clip-path: polygon(100% 50%, 0 0, 0 100%);
+  top: -25px;
+  left: 50%;
+  transform: translateX(-50%) rotate(180deg);
+  z-index: 10;
+  filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
+}
+
+.wheel-center {
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  background: var(--dark);
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  border: 5px solid var(--accent);
+  box-shadow: 0 0 15px rgba(255, 211, 42, 0.7);
+}
+
+.winner-container {
+  flex: 1;
+  min-width: 300px;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.selection-box {
+  background: linear-gradient(145deg, rgba(26, 26, 26, 0.9), rgba(10, 10, 10, 0.9));
+  border-radius: 20px;
+  padding: 30px;
+  border: 2px solid rgba(255, 71, 87, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  backdrop-filter: blur(10px);
+}
+
+.selection-box h2 {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  color: var(--light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.display {
+  height: 120px;
+  border: 2px dashed rgba(255, 71, 87, 0.5);
+  margin: 20px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  font-weight: 700;
+  border-radius: 15px;
+  background: rgba(10, 10, 10, 0.7);
+  transition: all 0.3s;
+  color: var(--accent);
+  overflow: hidden;
+  position: relative;
+}
+
+.display.winner-selected {
+  border: 2px solid var(--success);
+  box-shadow: 0 0 25px rgba(46, 213, 115, 0.5);
+  color: var(--success);
+  animation: pulse 1.5s infinite;
+}
+
+.display.spinning {
+  border: 2px solid var(--primary);
+  box-shadow: 0 0 25px rgba(255, 71, 87, 0.5);
+  color: var(--primary);
+}
+
+button {
+  padding: 18px 35px;
+  background: linear-gradient(to right, var(--primary), var(--primary-dark));
+  color: var(--light);
+  border: none;
+  border-radius: 12px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  width: 100%;
+  margin-top: 10px;
+  letter-spacing: 1px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(255, 71, 87, 0.3);
+}
+
+button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 25px rgba(255, 71, 87, 0.5);
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+button:disabled {
+  background: linear-gradient(to right, #555, #777);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+button::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.5);
+  opacity: 0;
+  border-radius: 100%;
+  transform: scale(1, 1) translate(-50%);
+  transform-origin: 50% 50%;
+}
+
+button:focus:not(:active)::after {
+  animation: ripple 1s ease-out;
+}
+
+.winner-info {
+  background: linear-gradient(145deg, rgba(26, 26, 26, 0.9), rgba(10, 10, 10, 0.9));
+  border-radius: 20px;
+  padding: 25px;
+  border: 2px solid rgba(46, 213, 115, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+}
+
+.winner-info h3 {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  color: var(--success);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  color: #aaa;
+}
+
+.info-value {
+  color: var(--light);
+  font-weight: 600;
+}
+
+.particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.confetti {
+  position: absolute;
+  width: 10px;
+  height: 20px;
+  opacity: 0;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 10px rgba(46, 213, 115, 0.5); }
+  50% { box-shadow: 0 0 25px rgba(46, 213, 115, 0.8); }
+  100% { box-shadow: 0 0 10px rgba(46, 213, 115, 0.5); }
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0, 0);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(50, 50);
+    opacity: 0;
+  }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes confetti-fall {
+  0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@media (max-width: 768px) {
+  .content {
+    flex-direction: column;
+  }
+  
+  .header h1 {
+    font-size: 2.2rem;
+  }
+  
+  .wheel {
+    height: 300px;
+  }
+}
 </style>
 </head>
 <body>
+<div class="particles" id="particles"></div>
 
-<div class="box">
-  <h2>🎡 اختيار الفائز</h2>
-  <div class="display" id="roll">---</div>
-  <button onclick="pickWinner()">اختيار فائز</button>
+<div class="container">
+  <div class="header">
+    <h1>🎡 عجلة الفائزين 🏆</h1>
+    <p>اختيار عشوائي محايد وشفاف للمشتركين مع عرض احتفالي للفائز</p>
+  </div>
+  
+  <div class="content">
+    <div class="wheel-container">
+      <div class="wheel" id="wheel"></div>
+      <div class="wheel-center"></div>
+    </div>
+    
+    <div class="winner-container">
+      <div class="selection-box">
+        <h2>👑 اختيار الفائز</h2>
+        <div class="display" id="roll">---</div>
+        <button id="pickWinnerBtn" onclick="pickWinner()">بدء الاختيار 🎯</button>
+        <div style="margin-top: 20px; color: #aaa; font-size: 0.9rem;">
+          <p>سيتم اختيار الفائز عشوائياً من قاعدة البيانات</p>
+          <p id="participantCount">جاري تحميل عدد المشتركين...</p>
+        </div>
+      </div>
+      
+      <div class="winner-info" id="winnerInfo" style="display: none;">
+        <h3>🏆 الفائز المحظوظ</h3>
+        <div class="info-row">
+          <span class="info-label">اسم المستخدم:</span>
+          <span class="info-value" id="winnerName">---</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">رقم الواتساب:</span>
+          <span class="info-value" id="winnerWhatsapp">---</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">وقت الفوز:</span>
+          <span class="info-value" id="winTime">---</span>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -33,41 +405,205 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-async function pickWinner(){
-  const snap = await db.ref("wheel_users").get();
-  if(!snap.exists()) return alert("لا يوجد مشتركين");
+let participants = [];
+let isSpinning = false;
 
-  const users=[];
-  snap.forEach(c=>users.push({id:c.key,...c.val()}));
-
-  let i=0;
-  const roll=setInterval(()=>{
-    document.getElementById("roll").textContent=users[i%users.length].roblox;
-    i++;
-  },80);
-
-  setTimeout(async ()=>{
-    clearInterval(roll);
-    const winner=users[Math.floor(Math.random()*users.length)];
-    document.getElementById("roll").textContent=winner.roblox;
-
-    // حذف المشترك
-    await db.ref("wheel_users/"+winner.id).remove();
-
-    // حذف IP
-    if(winner.ip){
-      await db.ref("ips/"+winner.ip.replace(/\./g,'_')).remove();
-    }
-
-    // تسجيل الفائز (هنا الرسالة هتتبعت)
-    await db.ref("winners").push({
-      roblox:winner.roblox,
-      whatsapp:winner.whatsapp,
-      time:Date.now()
-    });
-
-  },3000);
+// إنشاء تأثير الجسيمات
+function createParticles() {
+  const particlesContainer = document.getElementById('particles');
+  const colors = ['#ff4757', '#3742fa', '#ffd32a', '#2ed573', '#9c88ff', '#ff9ff3'];
+  
+  for (let i = 0; i < 50; i++) {
+    const confetti = document.createElement('div');
+    confetti.className = 'confetti';
+    confetti.style.left = Math.random() * 100 + 'vw';
+    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    confetti.style.width = Math.random() * 10 + 5 + 'px';
+    confetti.style.height = Math.random() * 20 + 10 + 'px';
+    confetti.style.opacity = '0';
+    particlesContainer.appendChild(confetti);
+  }
 }
+
+// تفعيل تأثير التخرج
+function activateConfetti() {
+  const confettiElements = document.querySelectorAll('.confetti');
+  confettiElements.forEach(confetti => {
+    confetti.style.left = Math.random() * 100 + 'vw';
+    confetti.style.animation = `confetti-fall ${Math.random() * 3 + 2}s linear forwards`;
+    confetti.style.opacity = '1';
+    
+    setTimeout(() => {
+      confetti.style.animation = '';
+      confetti.style.opacity = '0';
+    }, 5000);
+  });
+}
+
+// تحديث عدد المشاركين
+async function updateParticipantCount() {
+  try {
+    const snap = await db.ref("wheel_users").get();
+    if (snap.exists()) {
+      participants = [];
+      snap.forEach(c => participants.push({id: c.key, ...c.val()}));
+      document.getElementById('participantCount').textContent = `عدد المشتركين الحالي: ${participants.length}`;
+    } else {
+      document.getElementById('participantCount').textContent = 'لا يوجد مشتركين حالياً';
+    }
+  } catch (error) {
+    console.error("Error fetching participants:", error);
+  }
+}
+
+// تحويل الوقت إلى تنسيق مقروء
+function formatTime(timestamp) {
+  const date = new Date(timestamp);
+  return date.toLocaleString('ar-EG', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+  });
+}
+
+// تدوير العجلة
+function spinWheel(duration, finalAngle = 0) {
+  const wheel = document.getElementById('wheel');
+  wheel.style.transition = `transform ${duration}ms cubic-bezier(0.2, 0.8, 0.3, 1)`;
+  wheel.style.transform = `rotate(${finalAngle}deg)`;
+}
+
+async function pickWinner() {
+  if (isSpinning) return;
+  
+  const btn = document.getElementById('pickWinnerBtn');
+  const display = document.getElementById('roll');
+  const wheel = document.getElementById('wheel');
+  
+  // تحقق من وجود مشتركين
+  if (participants.length === 0) {
+    alert("⚠️ لا يوجد مشتركين في الوقت الحالي");
+    return;
+  }
+  
+  isSpinning = true;
+  btn.disabled = true;
+  btn.textContent = 'جاري الاختيار...';
+  display.classList.remove('winner-selected');
+  display.classList.add('spinning');
+  
+  // إخفاء معلومات الفائز السابق
+  document.getElementById('winnerInfo').style.display = 'none';
+  
+  // تدوير العجلة
+  const spins = 5; // عدد الدورات
+  const totalRotation = 360 * spins;
+  spinWheel(3000, totalRotation);
+  
+  // عرض الأسماء بسرعة
+  let i = 0;
+  const rollInterval = setInterval(() => {
+    display.textContent = participants[i % participants.length].roblox;
+    i++;
+    
+    // زيادة السرعة تدريجياً
+    if (i > 30) clearInterval(rollInterval);
+  }, 50);
+  
+  // بعد 1.5 ثانية، إبطاء العرض
+  setTimeout(() => {
+    clearInterval(rollInterval);
+    
+    let j = i % participants.length;
+    const slowInterval = setInterval(() => {
+      display.textContent = participants[j % participants.length].roblox;
+      j++;
+    }, 150);
+    
+    // بعد 3 ثوانٍ، اختيار الفائز
+    setTimeout(async () => {
+      clearInterval(slowInterval);
+      
+      // اختيار الفائز عشوائياً
+      const winner = participants[Math.floor(Math.random() * participants.length)];
+      
+      // عرض الفائز
+      display.textContent = winner.roblox;
+      display.classList.remove('spinning');
+      display.classList.add('winner-selected');
+      
+      // تدوير العجلة إلى موضع الفائز
+      const winnerIndex = participants.indexOf(winner);
+      const winnerAngle = 360 - (winnerIndex * (360 / participants.length));
+      const finalAngle = totalRotation + winnerAngle;
+      
+      spinWheel(2000, finalAngle);
+      
+      // عرض معلومات الفائز
+      document.getElementById('winnerName').textContent = winner.roblox;
+      document.getElementById('winnerWhatsapp').textContent = winner.whatsapp || 'غير متوفر';
+      document.getElementById('winTime').textContent = formatTime(Date.now());
+      document.getElementById('winnerInfo').style.display = 'block';
+      
+      // تفعيل تأثير التخرج
+      activateConfetti();
+      
+      // تحديث قاعدة البيانات
+      try {
+        // حذف المشترك من المشاركين
+        await db.ref("wheel_users/" + winner.id).remove();
+        
+        // حذف IP الخاص بالمشترك
+        if (winner.ip) {
+          await db.ref("ips/" + winner.ip.replace(/\./g, '_')).remove();
+        }
+        
+        // تسجيل الفائز
+        await db.ref("winners").push({
+          roblox: winner.roblox,
+          whatsapp: winner.whatsapp,
+          time: Date.now()
+        });
+        
+        console.log("الفائز تم تسجيله بنجاح:", winner.roblox);
+      } catch (error) {
+        console.error("حدث خطأ أثناء تحديث قاعدة البيانات:", error);
+        alert("⚠️ تم اختيار الفائز لكن حدث خطأ في التحديث. الرجاء المحاولة لاحقاً.");
+      }
+      
+      // تحديث قائمة المشاركين
+      participants = participants.filter(p => p.id !== winner.id);
+      document.getElementById('participantCount').textContent = `عدد المشتركين الحالي: ${participants.length}`;
+      
+      // إعادة تعيين الزر
+      btn.disabled = false;
+      btn.textContent = 'بدء الاختيار 🎯';
+      isSpinning = false;
+      
+    }, 1500); // وقت العرض البطيء
+  }, 1500); // وقت العرض السريع
+}
+
+// التهيئة الأولية
+document.addEventListener('DOMContentLoaded', function() {
+  createParticles();
+  updateParticipantCount();
+  
+  // تحديث عدد المشاركين كل 10 ثوانٍ
+  setInterval(updateParticipantCount, 10000);
+  
+  // إضافة تأثير الطفو للعجلة
+  const wheel = document.getElementById('wheel');
+  setInterval(() => {
+    wheel.style.transform = wheel.style.transform + ' translateY(-5px)';
+    setTimeout(() => {
+      wheel.style.transform = wheel.style.transform.replace(' translateY(-5px)', '');
+    }, 1000);
+  }, 2000);
+});
 </script>
 </body>
-</html>
+</html> 
