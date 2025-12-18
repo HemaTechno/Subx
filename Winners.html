@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <title>الفائزون</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+  <style>
+    *{box-sizing:border-box;font-family:'Cairo',sans-serif}
+    body{
+      margin:0;min-height:100vh;
+      background:radial-gradient(circle at top,#111,#000);
+      color:#fff;padding:20px
+    }
+    h1{text-align:center;margin-bottom:25px}
+    .container{max-width:600px;margin:auto}
+    .winner{
+      background:rgba(20,20,20,.9);
+      border:1px solid #ff2b2b;
+      border-radius:14px;
+      padding:15px;margin-bottom:15px;
+      box-shadow:0 0 20px rgba(255,43,43,.25)
+    }
+    .name{font-size:18px;font-weight:700;color:#ffb3b3}
+    .info{font-size:14px;color:#ccc;margin-top:5px}
+    .time{font-size:12px;color:#888;margin-top:8px;text-align:left}
+    .empty{text-align:center;color:#aaa;margin-top:40px}
+  </style>
+</head>
+<body>
+
+  <h1>🏆 الفائزون</h1>
+  <div class="container" id="list"></div>
+  <div class="empty" id="empty" style="display:none">لا يوجد فائزون حتى الآن</div>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyBoPJbx5v6EkOqxOJkbhzHqIJdAByh79Rg",
+    authDomain: "hhhhhh-d4fb8.firebaseapp.com",
+    databaseURL: "https://hhhhhh-d4fb8-default-rtdb.firebaseio.com",
+    projectId: "hhhhhh-d4fb8",
+    storageBucket: "hhhhhh-d4fb8.appspot.com",
+    messagingSenderId: "24512338206",
+    appId: "1:24512338206:web:dfe045db59bd3434a2110f"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+
+  const list = document.getElementById('list');
+  const empty = document.getElementById('empty');
+
+  db.ref('winners').on('value',snap=>{
+    list.innerHTML='';
+    if(!snap.exists()){
+      empty.style.display='block';return;
+    }
+    empty.style.display='none';
+
+    const arr=[];
+    snap.forEach(c=>arr.push(c.val()));
+
+    // ترتيب من الأحدث للأقدم
+    arr.sort((a,b)=>b.time-a.time);
+
+    arr.forEach(w=>{
+      const div=document.createElement('div');
+      div.className='winner';
+      div.innerHTML=`
+        <div class="name">👤 ${w.roblox}</div>
+        <div class="info">📱 ${w.whatsapp}</div>
+        <div class="time">🕒 ${new Date(w.time).toLocaleString('ar-EG')}</div>
+      `;
+      list.appendChild(div);
+    });
+  });
+</script>
+
+</body>
+</html>
