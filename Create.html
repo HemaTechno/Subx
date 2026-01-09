@@ -192,6 +192,14 @@
       object-fit:cover;
     }
     
+    .cover-optional {
+      display: block;
+      margin-top: 5px;
+      font-size: 13px;
+      color: var(--muted);
+      opacity: 0.8;
+    }
+    
     .small{
       font-size:13px;
       color:var(--muted);
@@ -258,6 +266,7 @@
       margin:8px 8px 0 0;
       transition: var(--transition);
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      max-width: 100%;
     }
     
     .task-pill:hover {
@@ -273,11 +282,24 @@
       padding:4px 8px;
       border-radius: 50%;
       transition: var(--transition);
+      flex-shrink: 0;
     }
     
     .task-pill .x:hover{
       background: rgba(239, 68, 68, 0.1);
       color: var(--red);
+    }
+    
+    .task-pill-content {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+    }
+    
+    .task-pill-content div {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     
     .meta{
@@ -314,6 +336,17 @@
       display: flex;
       align-items: center;
       color: var(--accent);
+      word-break: break-all;
+    }
+    
+    .link-result a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    
+    .link-result a:hover {
+      text-decoration: underline;
     }
     
     .link-result.active {
@@ -377,6 +410,7 @@
       font-weight:700;
       font-size: 18px;
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+      flex-shrink: 0;
     }
     
     .platform-y{background:linear-gradient(135deg, #ff2b2b, #cc0000)}
@@ -384,6 +418,8 @@
     .platform-i{background:linear-gradient(135deg, #d6249f, #a81c7c)}
     .platform-d{background:linear-gradient(135deg, #5865f2, #3c45a5)}
     .platform-t{background:linear-gradient(135deg, #0088cc, #006699)}
+    .platform-w{background:linear-gradient(135deg, #10b981, #059669)}
+    .platform-g{background:linear-gradient(135deg, #6b7280, #4b5563)}
     
     .actions{
       margin-top:16px;
@@ -488,6 +524,14 @@
         align-items: flex-start;
         gap: 16px;
       }
+      .task-pill {
+        flex-direction: column;
+        align-items: flex-start;
+        border-radius: 12px;
+      }
+      .task-pill .x {
+        align-self: flex-end;
+      }
     }
   </style>
 </head>
@@ -503,7 +547,7 @@
         </div>
       </div>
       <div style="text-align: left;">
-        <div class="small" style="color: var(--muted);">إصدار 1.0</div>
+        <div class="small" style="color: var(--muted);">إصدار 1.1</div>
         <div class="small" style="color: var(--primary);">Link Tasks Creator</div>
       </div>
     </div>
@@ -514,12 +558,12 @@
       <div class="form-section">
         <div class="form-section-title">المعلومات الأساسية</div>
         
-        <label>صورة الغلاف</label>
+        <label>صورة الغلاف <span class="cover-optional">(اختياري)</span></label>
         <div class="cover-box" id="coverBox">
           <div style="text-align: center;">
             <div style="font-size: 40px; margin-bottom: 8px;">📷</div>
             <div>أضغط لاختيار صورة (JPG, PNG)</div>
-            <div class="small" style="margin-top: 4px;">نسبة مقترحة 16:9</div>
+            <div class="small" style="margin-top: 4px;">نسبة مقترحة 16:9 - اختياري</div>
           </div>
           <input type="file" id="coverInput" accept="image/*" style="display:none" />
         </div>
@@ -548,6 +592,7 @@
               <option value="instagram">Instagram</option>
               <option value="discord">Discord</option>
               <option value="telegram">Telegram</option>
+              <option value="website">Website</option>
             </select>
           </div>
           <div style="width:120px;align-self:end">
@@ -576,7 +621,7 @@
       </div>
 
       <div class="meta">
-        <div class="muted-ghost">يمكن إضافة أكثر من مهمة، و لكل مهمة منصة ونوع (مثل: اشترك، لايك، تعليق)</div>
+        <div class="muted-ghost">يمكن إضافة أكثر من مهمة، و لكل مهمة منصة ونوع (مثل: اشترك، لايك، تعليق، زيارة موقع)</div>
         <div class="left">
           <div style="display: flex; align-items: center; gap: 8px;">
             <div style="width: 8px; height: 8px; background: #10b981; border-radius: 50%;"></div>
@@ -646,6 +691,14 @@
             <div class="small">Join channel / Send message</div>
           </div>
         </div>
+
+        <div class="platform-item" data-platform="website">
+          <div class="platform-icon platform-w">WEB</div>
+          <div>
+            <div><strong>Website</strong></div>
+            <div class="small">Visit Website / Click link / Read page</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -666,12 +719,13 @@
           <option value="instagram">Instagram</option>
           <option value="discord">Discord</option>
           <option value="telegram">Telegram</option>
+          <option value="website">Website</option>
         </select>
 
         <label>نوع المهمة</label>
         <select id="taskType"></select>
 
-        <label>رابط (مثال: فيديو يوتيوب أو صفحة فيسبوك) - اختياري</label>
+        <label>رابط (مثال: رابط موقع أو فيديو) - <span class="small">اختياري</span></label>
         <input id="taskLink" type="url" placeholder="https://..." />
 
         <label>تعليمات إضافية (اختياري)</label>
@@ -762,6 +816,12 @@
       telegram: [
         {key:'join', label:'Join channel/group'},
         {key:'message', label:'Send message'}
+      ],
+      website: [
+        {key:'visit', label:'Visit Website'},
+        {key:'click', label:'Click link'},
+        {key:'read', label:'Read page'},
+        {key:'register', label:'Register on site'}
       ]
     };
 
@@ -780,7 +840,7 @@
         const pill = document.createElement('div');
         pill.className = 'task-pill';
         pill.innerHTML = `
-          <div style="text-align:right">
+          <div class="task-pill-content">
             <div style="font-weight:600">${t.typeLabel}</div>
             <div class="small" style="color:var(--muted)">${t.platform} ${t.link? '• '+t.link : ''} ${t.note? '• '+t.note : ''}</div>
           </div>
@@ -912,8 +972,9 @@
         const docRef = await db.collection('links').add(docData);
         const docId = docRef.id;
         // construct friendly short link (tweak as needed)
-        const publicLink = `task.subx.click/?id=${idField}`;
-        resultBox.innerHTML = `<div>Created: <a href="${publicLink}" target="_blank" style="color: var(--primary); text-decoration: none;">${publicLink}</a><div class="small">Document ID: ${docId}</div></div>`;
+        const idField = idInput.value.trim() || docId;
+        const publicLink = `https://subx.click/task/?id=${idField}`;
+        resultBox.innerHTML = `<div>تم الإنشاء بنجاح!<br><a href="${publicLink}" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: 500;">${publicLink}</a><br><div class="small" style="margin-top: 5px;">Document ID: ${docId}</div></div>`;
         resultBox.classList.add('active');
       }catch(err){
         console.error(err);
